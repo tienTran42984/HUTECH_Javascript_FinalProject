@@ -1,3 +1,26 @@
+const courses = [
+  {
+    id: "C001",
+    title: "Java Programming Basics",
+    description: "Introductory Java course. Through this course you will learn essential knowledge about Java programming language"
+  },
+  {
+    id: "C002",
+    title: "Web Development with JavaScript",
+    description: "Learn HTML, CSS, and JavaScript fundamentals."
+  },
+  {
+    id: "C003",
+    title: "Database Fundamentals",
+    description: "SQL basics and database design."
+  },
+  {
+    id: "C004",
+    title: "Classic Art Analysis",
+    description: "This course is everything you need to know about classic arts. Including a new way to behold them."
+  }
+];
+
 const navButtons = document.querySelectorAll(".nav-btn");
 const pageContainer = document.getElementById("pageContainer")
 const pageTitle = document.getElementById("pageTitle");
@@ -42,6 +65,10 @@ async function loadPage(pageName) {
     if(pageName === "settings"){
         setupAccountForm();
     }
+
+    if(pageName === "courses"){
+        renderCourses();
+    }
 }
 
 function setupAccountForm() {
@@ -80,4 +107,35 @@ function setupAccountForm() {
         success.style.display = "block"
         form.reset();
     })
+}
+
+function renderCourses() {
+    const grid = document.getElementById("coursesGrid")
+    if(!grid) return;
+
+    grid.innerHTML = courses.map(course => 
+        `<div class="course-card">
+            <div>
+                <h3 class="course-title">${course.title}</h3>
+                <p class="course-desc">${course.description}</p>
+            </div>
+
+            <div class="course-footer">
+                <button class="app-btn primary w-100 manage-sessions-btn"
+                data-course-id="${course.id}">
+                    <i class="bi bi-gear-fill"></i>
+                    Manage Sessions
+                </button>
+            </div>
+        </div>`
+    ).join("")
+
+    document.querySelectorAll(".manage-sessions-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const courseId = btn.dataset.courseId;
+            localStorage.setItem("selectedCourseId", courseId);
+            loadPage("sessions")
+        })
+    })
+
 }
