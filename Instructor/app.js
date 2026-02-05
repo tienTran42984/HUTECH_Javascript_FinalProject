@@ -6,7 +6,7 @@ const courses = [
   },
   {
     id: "C002",
-    title: "Web Development with JavaScript",
+    title: "Web Development with JS",
     description: "Learn HTML, CSS, and JavaScript fundamentals."
   },
   {
