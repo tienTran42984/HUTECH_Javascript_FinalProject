@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+         <style>
+            body {
+                background-color: #f5f7fb;
+            }
+            .login-card {
+                max-width: 420px;
+                border-radius: 12px;
+            }
+            .login-btn {
+                background-color: #1e7be6;
+                border: none;
+            }
+            .login-btn:hover {
+                background-color: #1669c1;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container vh-100 d-flex justify-content-center align-items-center">
+            <div class="card login-card shadow-sm p-5">
+                <h4 class="text-center mb-4 fw-semibold">Login</h4>
+
+                <form>
+                    <div class="mb-4">
+                        <input type="email" class="form-control form-control-lg"
+                            placeholder="Email address" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <input type="password" class="form-control form-control-lg"
+                            placeholder="Password" required>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg login-btn">
+                            Login
+                        </button>
+                    </div>
+
+                    <p class="text-center mb-0">
+                        Do not have an account?
+                        <a href="register_account.html" class="text-decoration-none">Register here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
