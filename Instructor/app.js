@@ -69,6 +69,10 @@ async function loadPage(pageName) {
     if(pageName === "courses"){
         renderCourses();
     }
+
+    if(pageName === "sessions"){
+        renderSessions();
+    }
 }
 
 function setupAccountForm() {
@@ -137,5 +141,13 @@ function renderCourses() {
             loadPage("sessions")
         })
     })
+}
 
+function renderSessions() {
+    const courseId = localStorage.getItem("selectedCourseId");
+    const info = document.getElementById("sessionsCourseInfo");
+    if (!info) return;
+
+    const course = courses.find(c => c.id === courseId);
+    info.textContent = course ? `Course: ${course.title} (${course.id})` : "No course selected.";
 }
