@@ -21,6 +21,21 @@ const courses = [
   }
 ];
 
+const sessions = [
+  {
+    sessionNo: 1,
+    courseId: "C001",
+    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+  },
+  {
+    sessionNo: 2,
+    courseId: "C001",
+    videoUrl: "https://www.w3schools.com/html/movie.mp4",
+    pdfUrl: "https://www.africau.edu/images/default/sample.pdf"
+  }
+];
+
 const navButtons = document.querySelectorAll(".nav-btn");
 const pageContainer = document.getElementById("pageContainer")
 const pageTitle = document.getElementById("pageTitle");
@@ -60,7 +75,8 @@ async function loadPage(pageName) {
     pageTitle.textContent = titleMap[pageName] || "Dashboard";
 
     navButtons.forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`.nav-btn[data-page="${pageName}"]`).classList.add("active");
+    const activeBtn = document.querySelector(`.nav-btn[data-page="${pageName}"]`);
+    if (activeBtn) activeBtn.classList.add("active");
 
     if(pageName === "settings"){
         setupAccountForm();
@@ -78,9 +94,9 @@ async function loadPage(pageName) {
 function setupAccountForm() {
     const passwordForm = document.getElementById("passwordForm");
 
-    if(!form) return;
+    if(!passwordForm) return;
 
-    form.addEventListener("submit", (e) => {
+    passwordForm.addEventListener("submit", (e) => {
         e.preventDefault()
 
         const oldPass = document.getElementById("oldPass").value.trim();
@@ -137,17 +153,110 @@ function renderCourses() {
     document.querySelectorAll(".manage-sessions-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const courseId = btn.dataset.courseId;
-            localStorage.setItem("selectedCourseId", courseId);
+            const course = courses.find(c => c.id === courseId);
+            localStorage.setItem("selectedCourse", JSON.stringify(course));
+
+            const TestCourse = JSON.parse(localStorage.getItem("selectedCourse"));
+            alert(JSON.stringify(TestCourse, null, 2));
+
             loadPage("sessions")
         })
     })
 }
 
 function renderSessions() {
-    const courseId = localStorage.getItem("selectedCourseId");
-    const info = document.getElementById("sessionsCourseInfo");
-    if (!info) return;
+    const text = document.getElementById("sessionsForText");
+    const sessionsBody = document.getElementById("sessionsBody");
+    const course = JSON.parse(localStorage.getItem("selectedCourse"));
+    const courseSessions = sessions.filter(s => s.courseId === course.id);
 
-    const course = courses.find(c => c.id === courseId);
-    info.textContent = course ? `Course: ${course.title} (${course.id})` : "No course selected.";
+    if (!text) return;
+    text.textContent = course ? `Sessions for course: ${course.title}` : "No course selected";
+
+    sessionsBody.innerHTML = courseSessions.map(courseSession => 
+        `
+        <tr>
+            <td>${courseSession.sessionNo}</td>
+            <td>
+                 <button class="action-btn video preview-video-btn"
+                    data-session-id="${courseSession.sessionNo}">
+                    <i class="bi bi-play-circle"></i>
+                    Preview Video
+                </button>
+            </td>
+            <td>
+                <button class="action-btn pdf preview-pdf-btn"
+                    data-session-id="${courseSession.sessionNo}">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    Preview PDF
+                </button>
+            </td>
+            <td>
+                <div class="session-actions">
+                    <button class="mini-btn edit edit-session-btn"
+                        data-session-id="${courseSession.sessionNo}">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit
+                    </button>
+
+                    <button class="mini-btn exercise exercise-session-btn"
+                        data-session-id="${courseSession.sessionNo}">
+                        <i class="bi bi-journal-text"></i>
+                        Exercises
+                    </button>
+
+                    <button class="mini-btn delete delete-session-btn"
+                        data-session-id="${courseSession.sessionNo}">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </button>
+                </div>
+            </td>
+        </tr>
+         `
+    ).join("");
+
+    document.querySelectorAll(".preview-pdf-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const sessionNo = Number(btn.dataset.sessionId)
+            console.log(sessionNo);
+            const session = sessions.find(s => s.sessionNo === sessionNo)
+            console.log(session);
+
+            if (!session || !session.pdfUrl) {
+                alert("No PDF available for this session.");
+                return;
+            }
+
+            window.open(session.pdfUrl, "_blank")
+        })
+    })
+
+    document.querySelectorAll(".preview-video-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const sessionNo = Number(btn.dataset.sessionId)
+            const session = sessions.find(s => s.id === sessionNo)
+
+            if (!session || !session.videoUrl) {
+                alert("No video available for this session.");
+                return;
+            }
+
+            window.open(session.videoUrl, "_blank");
+        })
+    })
+
+    document.querySelectorAll(".delete-session-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const ok = confirm("Delete session " + btn.dataset.sessionId + "?");
+            const sessionNo = Number(btn.dataset.sessionId)
+
+            if(ok){
+                const index = sessions.findIndex(s => s.sessionNo === sessionNo);
+                sessions.splice(index, 1)
+                alert("Delete session successfully")
+                loadPage("sessions");
+            }
+        })
+    })
 }
