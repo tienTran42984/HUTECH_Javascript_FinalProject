@@ -235,7 +235,9 @@ function renderSessions() {
     document.querySelectorAll(".preview-video-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const sessionNo = Number(btn.dataset.sessionId)
-            const session = sessions.find(s => s.id === sessionNo)
+            console.log(sessionNo)
+            const session = sessions.find(s => s.sessionNo === sessionNo)
+            console.log(session)
 
             if (!session || !session.videoUrl) {
                 alert("No video available for this session.");
