@@ -4,9 +4,34 @@
     Manage Sessions
   </h2>
 
-  <p class="page-subtitle" id="sessionsCourseInfo"></p>
+  <p class="page-subtitle" id="sessionsForText">
+    View and manage the courses assigned to you.
+  </p>
+
+  <div class="header-actions">
+    <button class="app-btn" id="backToCoursesBtn">
+      <i class="bi bi-arrow-left"></i>
+      Back to My Courses
+    </button>
+
+    <button class="app-btn primary" id="addSessionBtn">
+      <i class="bi bi-plus-circle"></i>
+      Add Session
+    </button>
+  </div>
 </div>
 
-<div class="simple-card">
-  <p>Sessions management page will be built next.</p>
+<div class="table-card">
+  <table class="sessions-table">
+    <thead>
+      <tr>
+        <th style="width: 70px;">#</th>
+        <th>Video</th>
+        <th>Document</th>
+        <th style="width: 320px;">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="sessionsBody"></tbody>
+  </table>
 </div>

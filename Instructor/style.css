@@ -376,3 +376,118 @@ input:disabled {
 .course-footer {
   margin-top: auto;
 }
+
+/*-----------MANAGE SESSIONS------------*/
+/* ===== Sessions Page ===== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-card {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid #eef2f7;
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.sessions-table thead th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  padding: 12px 12px;
+  border-bottom: 1px solid #e8eef7;
+}
+
+.sessions-table tbody td {
+  padding: 12px 12px;
+  font-size: 14px;
+  color: #0f172a;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.sessions-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* Preview buttons */
+.action-btn {
+  border: 1px solid #dbe3ef;
+  padding: 7px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: white;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.15s;
+  font-size: 13px;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+.action-btn.video i {
+  color: #0d6efd;
+}
+
+.action-btn.pdf i {
+  color: #16a34a;
+}
+
+/* Actions group */
+.session-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Small action buttons */
+.mini-btn {
+  border: 1px solid #dbe3ef;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: white;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: 0.15s;
+  font-size: 13px;
+}
+
+.mini-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+.mini-btn.edit i {
+  color: #0d6efd;
+}
+
+.mini-btn.exercise i {
+  color: #16a34a;
+}
+
+.mini-btn.delete {
+  border-color: #fecaca;
+}
+
+.mini-btn.delete i {
+  color: #dc2626;
+}
