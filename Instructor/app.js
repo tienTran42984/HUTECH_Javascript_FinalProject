@@ -188,7 +188,7 @@ function renderCourses() {
     const grid = document.getElementById("coursesGrid")
     if(!grid) return;
 
-    grid.innerHTML = filterCourse.map(course => 
+    grid.innerHTML = courses.map(course => 
         `<div class="course-card">
             <div>
                 <h3 class="course-title">${course.title}</h3>
