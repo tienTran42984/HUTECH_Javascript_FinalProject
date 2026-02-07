@@ -1,0 +1,32 @@
+<div class="simple-card">
+  <h3 class="mb-3">
+    <i class="bi bi-plus-circle"></i>
+    Add New Session
+  </h3>
+
+  <form id="addSessionForm">
+
+    <div class="form-group">
+      <label class="form-label">Upload Video (MP4)</label>
+      <input type="file" id="videoFile" class="form-control" accept="video/mp4">
+    </div>
+
+    <div class="preview-area">
+        <div class="preview-box">
+            <p class="preview-title">Video Preview</p>
+            <video id="videoPreview" controls style="display:none;"></video>
+            <p id="videoEmptyText" class="empty-preview">No video selected</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Upload Document (PDF)</label>
+      <input type="file" id="pdfFile" class="form-control" accept="application/pdf">
+    </div>
+
+    <button type="submit" class="app-btn primary w-100 add-session-btn">
+      Save Session
+    </button>
+
+  </form>
+</div>

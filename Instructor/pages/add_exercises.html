@@ -1,0 +1,31 @@
+<div class="simple-card">
+    <div>
+        <h3 class="mb-3">
+            <i class="bi bi-file-earmark-spreadsheet"></i>
+            Import Exercises from Excel
+        </h3>
+
+        <button type="button" class="app-btn" id="backToExerciseBtn">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </button>
+    </div>
+
+  <div class="excel-actions">
+    <input type="file" id="excelFile" accept=".xlsx" />
+
+    <button class="app-btn primary" id="importExcelBtn">
+      Import Excel
+    </button>
+
+    <a class="app-btn" href="../assets/templates/exercise_template.xlsx" download>
+      Download Template
+    </a>
+  </div>
+
+  <p class="hint-text">
+    Excel columns: Question, Option_A, Option_B, Option_C, Option_D, Answer
+  </p>
+
+  <div id="importResult" class="mt-3"></div>
+</div>
