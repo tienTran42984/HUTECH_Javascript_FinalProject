@@ -84,11 +84,34 @@ async function loadPage(pageName) {
 
     if(pageName === "courses"){
         renderCourses();
+        const addingCourseBtn = document.getElementById("addCourseBtn")
+        addingCourseBtn.addEventListener("click", () => {
+            loadPage("add_courses")
+        })
     }
 
     if(pageName === "sessions"){
         renderSessions();
     }
+    if(pageName === "add_sessions"){
+        setupAddingSession()
+    }
+
+    if(pageName === "edit_sessions"){
+        setupEditSession()
+    }
+
+    if(pageName === "add_courses"){
+        setupAddingCourses()
+    }
+}
+
+function generateNextCourseId(){
+  if(courses.length === 0) return "C001";
+
+  const maxNum = Math.max(...courses.map(c => Number(c.id.replace("C", ""))));
+
+  return "C" + String(maxNum + 1).padStart(3, "0");
 }
 
 function setupAccountForm() {
@@ -126,6 +149,38 @@ function setupAccountForm() {
         success.textContent = "Changning password successfully"
         success.style.display = "block"
         form.reset();
+    })
+}
+
+function setupAddingCourses() {
+    const form = document.getElementById("addCourseForm")
+    const backBtn = document.getElementById("backToCoursesBtn")
+
+    backBtn.addEventListener("click", () => {
+        loadPage("courses")
+    })
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        const title = document.getElementById("courseTitle").value.trim();
+        const description = document.getElementById("courseDesc").value.trim();
+
+        if(!title || !description){
+            alert("Please fill all fields.");
+            return;
+        }
+
+        const newCourseId = generateNextCourseId()
+        const newCourse = {
+            id: newCourseId,
+            title: title,
+            description: description
+        }
+        courses.push(newCourse)
+
+        alert("Course added!");
+        loadPage("courses");
     })
 }
 
@@ -167,8 +222,10 @@ function renderCourses() {
 function renderSessions() {
     const text = document.getElementById("sessionsForText");
     const sessionsBody = document.getElementById("sessionsBody");
+    const addSessionBtn = document.getElementById("addSessionBtn");
     const course = JSON.parse(localStorage.getItem("selectedCourse"));
     const courseSessions = sessions.filter(s => s.courseId === course.id);
+    const backBtn = document.getElementById("backToCoursesBtn");
 
     if (!text) return;
     text.textContent = course ? `Sessions for course: ${course.title}` : "No course selected";
@@ -216,6 +273,10 @@ function renderSessions() {
          `
     ).join("");
 
+    backBtn.addEventListener("click", () => {
+        loadPage("courses")
+    })
+
     document.querySelectorAll(".preview-pdf-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const sessionNo = Number(btn.dataset.sessionId)
@@ -235,7 +296,9 @@ function renderSessions() {
     document.querySelectorAll(".preview-video-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const sessionNo = Number(btn.dataset.sessionId)
-            const session = sessions.find(s => s.id === sessionNo)
+            console.log(sessionNo)
+            const session = sessions.find(s => s.sessionNo === sessionNo)
+            console.log(session)
 
             if (!session || !session.videoUrl) {
                 alert("No video available for this session.");
@@ -259,4 +322,114 @@ function renderSessions() {
             }
         })
     })
+
+    document.querySelectorAll(".edit-session-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const sessionNo =  Number(btn.dataset.sessionId)
+            const course = JSON.parse(localStorage.getItem("selectedCourse"))
+            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === course.id)
+
+            localStorage.setItem("editingSession", JSON.stringify(session))
+            loadPage("edit_sessions")
+        })
+    })
+
+    addSessionBtn.addEventListener("click", () => {
+        loadPage("add_sessions")
+    })
+}
+
+function setupAddingSession() {
+    const form = document.getElementById("addSessionForm")
+    
+    const videoInput = document.getElementById("videoFile")
+    const videoPreview = document.getElementById("videoPreview")
+    const videoEmpty = document.getElementById("videoEmptyText")
+
+    videoInput.addEventListener("change", () => {
+        const file = videoInput.files[0]
+
+        const url = URL.createObjectURL(file)
+        videoPreview.src = url
+        videoPreview.style.display = "block";
+        videoEmpty.style.display = "none";
+    })
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        const course = JSON.parse(localStorage.getItem("selectedCourse"))
+        const videoFile = document.getElementById("videoFile").files[0]
+        const pdfFile = document.getElementById("pdfFile").files[0]
+
+        if (!videoFile && !pdfFile) {
+            alert("Please upload both MP4 and PDF.");
+            return;
+        }
+
+        const courseSessions = sessions.filter(s => s.courseId === course.id);
+        const nextSessionNo = courseSessions.length > 0 ? Math.max(...courseSessions.map(s => s.sessionNo)) + 1 : 1
+        
+        const newSession = {
+            sessionNo: nextSessionNo,
+            courseId: course.id,
+            videoUrl: URL.createObjectURL(videoFile),
+            pdfUrl: URL.createObjectURL(pdfFile)
+        }
+
+        sessions.push(newSession)
+        alert(`Session ${newSession} added`);
+        form.reset()
+        loadPage("sessions")
+    })
+}
+
+function setupEditSession(){
+    const form = document.getElementById("editSessionForm")
+    const videoPreview = document.getElementById("videoPreview")
+    const videoEmpty = document.getElementById("videoEmptyText")
+    const viewPdfBtn = document.getElementById("previewPdf");
+    const newVideo = document.getElementById("videoFile");
+    const newPdf = document.getElementById("pdfFile")
+
+    const session = JSON.parse(localStorage.getItem("editingSession"))
+    console.log(session)
+    console.log(session.videoUrl);
+
+    if(session.videoUrl){
+        console.log(session.videoUrl);
+        videoPreview.src = session.videoUrl
+        videoPreview.style.display = "block"
+        videoEmpty.style.display = "none"
+    }
+
+    viewPdfBtn.addEventListener("click", () => {
+        window.open(session.pdfUrl, "_blank")
+    })
+
+    newVideo.addEventListener("change", () => {
+        const file = newVideo.files[0]
+
+        const url = URL.createObjectURL(file)
+        videoPreview.src = url
+        videoPreview.style.display = "block";
+        videoEmpty.style.display = "none";
+    })
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        const videoFile = newVideo.files[0]
+        const pdfFile = newPdf.files[0]
+
+        if (videoFile) session.videoUrl = URL.createObjectURL(videoFile)
+        if (pdfFile) session.pdfUrl = URL.createObjectURL(pdfFile)
+
+        const index = sessions.findIndex(s => s.sessionNo === session.sessionNo)
+        if (index !== -1) sessions[index] = session
+
+        alert("Session updated")
+        loadPage("sessions")
+    })
+
 }
