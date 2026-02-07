@@ -84,6 +84,10 @@ async function loadPage(pageName) {
 
     if(pageName === "courses"){
         renderCourses();
+        const addingCourseBtn = document.getElementById("addCourseBtn")
+        addingCourseBtn.addEventListener("click", () => {
+            loadPage("add_courses")
+        })
     }
 
     if(pageName === "sessions"){
@@ -96,6 +100,18 @@ async function loadPage(pageName) {
     if(pageName === "edit_sessions"){
         setupEditSession()
     }
+
+    if(pageName === "add_courses"){
+        setupAddingCourses()
+    }
+}
+
+function generateNextCourseId(){
+  if(courses.length === 0) return "C001";
+
+  const maxNum = Math.max(...courses.map(c => Number(c.id.replace("C", ""))));
+
+  return "C" + String(maxNum + 1).padStart(3, "0");
 }
 
 function setupAccountForm() {
@@ -136,11 +152,43 @@ function setupAccountForm() {
     })
 }
 
+function setupAddingCourses() {
+    const form = document.getElementById("addCourseForm")
+    const backBtn = document.getElementById("backToCoursesBtn")
+
+    backBtn.addEventListener("click", () => {
+        loadPage("courses")
+    })
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        const title = document.getElementById("courseTitle").value.trim();
+        const description = document.getElementById("courseDesc").value.trim();
+
+        if(!title || !description){
+            alert("Please fill all fields.");
+            return;
+        }
+
+        const newCourseId = generateNextCourseId()
+        const newCourse = {
+            id: newCourseId,
+            title: title,
+            description: description
+        }
+        courses.push(newCourse)
+
+        alert("Course added!");
+        loadPage("courses");
+    })
+}
+
 function renderCourses() {
     const grid = document.getElementById("coursesGrid")
     if(!grid) return;
 
-    grid.innerHTML = courses.map(course => 
+    grid.innerHTML = filterCourse.map(course => 
         `<div class="course-card">
             <div>
                 <h3 class="course-title">${course.title}</h3>
@@ -177,6 +225,7 @@ function renderSessions() {
     const addSessionBtn = document.getElementById("addSessionBtn");
     const course = JSON.parse(localStorage.getItem("selectedCourse"));
     const courseSessions = sessions.filter(s => s.courseId === course.id);
+    const backBtn = document.getElementById("backToCoursesBtn");
 
     if (!text) return;
     text.textContent = course ? `Sessions for course: ${course.title}` : "No course selected";
@@ -223,6 +272,10 @@ function renderSessions() {
         </tr>
          `
     ).join("");
+
+    backBtn.addEventListener("click", () => {
+        loadPage("courses")
+    })
 
     document.querySelectorAll(".preview-pdf-btn").forEach(btn => {
         btn.addEventListener("click", () => {
