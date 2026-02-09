@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+         <style>
+            body {
+                background-color: #f5f7fb;
+            }
+            .register-card {
+                max-width: 420px;
+                border-radius: 12px;
+            }
+            .register-btn {
+                background-color: #1e7be6;
+                border: none;
+            }
+            .register-btn:hover {
+                background-color: #1669c1;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container vh-100 d-flex justify-content-center align-items-center">
+            <div class="card register-card shadow-sm p-5">
+                <h3 class="text-center fw-bold mb-2">Register Free Account</h3>
+                <p class="text-center text-muted mb-4">
+                    Create your account to start learning
+                </p>
+
+                <form id="registerForm">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Full Name</label>
+                        <input type="text" class="form-control form-control-lg" id="nameInput"
+                            placeholder="Nguyen Van A..." required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        <input type="email" class="form-control form-control-lg" id="emailInput"
+                            placeholder="abc@gmail.com..." required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Password</label>
+                        <input type="password" class="form-control form-control-lg" id="passwordInput"
+                            placeholder="Password..." required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Retype Password</label>
+                        <input type="password" class="form-control form-control-lg" id="retypePasswordInput"
+                            placeholder="Retype Password..." required>
+                    </div>
+
+                    <p id="registerError" class="text-danger text-center mb-3" style="display:none;"></p>
+                    <p id="registerSuccess" class="text-success text-center mb-3" style="display:none;"></p>
+                    
+                    <div class="text-center mb-4">
+                        <button type="submit" class="btn btn-primary btn-lg register-btn">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <p class="text-center mb-0">
+                        Do you have an account?
+                        <a href="login.html" class="text-decoration-none">Login here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        const registerForm = document.getElementById("registerForm")
+        const nameInput = document.getElementById("nameInput")
+        const emailInput = document.getElementById("emailInput")
+        const passwordInput = document.getElementById("passwordInput")
+        const retypePasswordInput = document.getElementById("retypePasswordInput")
+
+        const registerError = document.getElementById("registerError");
+        const registerSuccess = document.getElementById("registerSuccess");
+
+        function showError(msg) {
+            registerSuccess.style.display = "none";
+            registerError.style.display = "block";
+            registerError.textContent = msg;
+        }
+
+        function showSuccess(msg) {
+            registerError.style.display = "none";
+            registerSuccess.style.display = "block";
+            registerSuccess.textContent = msg;
+        }
+
+        registerForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+
+            const nameValue = nameInput.value.trim()
+            const emailValue = emailInput.value.trim()
+            const passwordValue = passwordInput.value.trim()
+            const retypePasswordValue = retypePasswordInput.value.trim()
+
+            if (!nameValue || !emailValue || !passwordValue || !retypePasswordValue) {
+                showError("Please fill in all fields.");
+                return;
+            }
+
+            if (passwordValue.length < 6) {
+                showError("Password must be at least 6 characters.");
+                return;
+            }
+
+            if (passwordValue !== retypePasswordValue) {
+                showError("Passwords do not match.");
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem("users")) 
+
+            const emailExists = user.some(u => u.email.toLowerCase() === emailValue);
+            if (emailExists) {
+                showError("This email is already registered.");
+                return;
+            }
+
+            const newUser = {
+                id: user.length > 0 ? Math.max(...user.map(u => u.id)) + 1 : 1,
+                username: nameValue,
+                email: emailValue,
+                password: passwordValue,
+                verified: false,
+                phone: "",   
+                role: "Learner"
+            };
+
+            user.push(newUser);
+            localStorage.setItem("users", JSON.stringify(user));
+
+
+            const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+            localStorage.setItem("pendingVerifiedEmail", emailValue)
+            localStorage.setItem("pendingVerifiedCode", verificationCode)
+
+            alert(`Verification Code (Demo): ${verificationCode}`);
+
+            window.location.href = "email_verification.html";
+        })
+    </script>
+</html>

@@ -53,9 +53,22 @@ const exercises = [
 const navButtons = document.querySelectorAll(".nav-btn");
 const pageContainer = document.getElementById("pageContainer")
 const pageTitle = document.getElementById("pageTitle");
+const userEmail = document.getElementById("userEmail");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const loginUser = JSON.parse(localStorage.getItem("loginUser"))
+console.log(loginUser)
+if(!loginUser){
+    window.location.href = "../../General/pages/login.html"
+}
+if(loginUser.role !== "Instructor" || loginUser.verified === false) {
+    alert("Access denied!")
+    window.location.href = "../../General/pages/login.html"
+}
+
 loadPage("dashboard");
+userEmail.textContent = loginUser.email;
+
 
 navButtons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -138,6 +151,13 @@ function generateNextCourseId(){
 
 function setupAccountForm() {
     const passwordForm = document.getElementById("passwordForm");
+    const nameDisplay = document.getElementById("nameDisplay");
+    const emailDisplay = document.getElementById("emailDisplay");
+    const phoneDisplay = document.getElementById("phoneDisplay");
+
+    nameDisplay.value = loginUser.username;
+    emailDisplay.value = loginUser.email;
+    phoneDisplay.value = loginUser.phone;
 
     if(!passwordForm) return;
 
@@ -150,9 +170,17 @@ function setupAccountForm() {
         const success = document.getElementById("passSuccess");
         const error = document.getElementById("passError");
 
+        if(oldPass !== loginUser.password) {
+            error.textContent = "Password is not matched"
+            error.style.display = "block"
+            success.style.display = "none"
+            return;
+        }
+
         if(newPass !== confirmPass){
             error.textContent = "Confirm password is not matched with entered password"
             error.style.display = "block"
+            success.style.display = "none"
             return;
         }
 
@@ -165,12 +193,16 @@ function setupAccountForm() {
         if (oldPass === newPass) {
             error.textContent = "New password must be different from old password."
             error.style.display = "block"
+            success.style.display = "none"
             return
         }
-        
-        success.textContent = "Changning password successfully"
+
+        loginUser.password = newPass;
         success.style.display = "block"
-        form.reset();
+        success.textContent = "Changing password successfully!!!"
+        error.style.display = "none"
+        localStorage.setItem("loginUser", JSON.stringify(loginUser));
+        passwordForm.reset();
     })
 }
 
