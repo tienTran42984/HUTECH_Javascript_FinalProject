@@ -43,14 +43,16 @@
                     Please enter the code below
                 </p>
 
-                <form>
+                <form id="emailVerificaionForm">
                     <div class="mb-4">
-                        <input type="text" inputmode="numeric" maxlength="6"
+                        <input type="text" inputmode="numeric" maxlength="6" id="codeInput"
                             class="form-control form-control-lg text-center fw-bold code-input"
                             placeholder="_ _ _ _ _ _"
                             required
                         >
                     </div>
+
+                    <p id="verifiedFail" class="text-danger text-center mb-3" style="display:none;"></p>
 
                     <div class="text-center mb-4">
                         <button type="submit" class="btn btn-primary btn-lg login-btn">
@@ -66,4 +68,39 @@
             </div>
         </div>
     </body>
+
+    <script>
+        const form = document.getElementById("emailVerificaionForm")
+        const codeInput = document.getElementById("codeInput")
+        const error = document.getElementById("verifiedFail")
+
+        function DisplayFail(msg){
+            error.style.display = "block"
+            error.textContent = msg
+        }
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+
+            const savedCode = localStorage.getItem("pendingVerifiedCode");
+            const savedEmail = localStorage.getItem("pendingVerifiedEmail");
+
+            if(codeInput.value === savedCode){
+                alert("Verified successfully!");
+
+                const users = JSON.parse(localStorage.getItem("users"))
+                const user = users.find(u => u.email === savedEmail)
+
+                if(user){
+                    user.verified = true
+                }
+
+                localStorage.setItem("users", JSON.stringify(users));
+                localStorage.removeItem("pendingVerifyCode");
+                localStorage.removeItem("pendingVerifyEmail");
+
+                window.location.href = "login.html";
+            }   
+        })
+    </script>
 </html>
