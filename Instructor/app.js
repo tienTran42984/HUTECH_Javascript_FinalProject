@@ -2,24 +2,28 @@ const courses = [
   {
     id: "C001",
     title: "Java Programming Basics",
+    status: "Available",
     description: "Introductory Java course. Through this course you will learn essential knowledge about Java programming language",
     price: 120
   },
   {
     id: "C002",
     title: "Web Development with JavaScript",
+    status: "Available",
     description: "Learn HTML, CSS, and JavaScript fundamentals.",
     price: 130
   },
   {
     id: "C003",
     title: "Database Fundamentals",
+    status: "Available",
     description: "SQL basics and database design.",
     price: 200
   },
   {
     id: "C004",
     title: "Classic Art Analysis",
+    status: "Unavailable",
     description: "This course is everything you need to know about classic arts. Including a new way to behold them.",
     price: 100
   }

@@ -143,3 +143,102 @@
 .settings-btn:hover {
   background: #f3f4f6;
 }
+
+/*------------MANAGECOURSE-----------*/
+.courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.add-course-btn {
+    background: #2b6ef2;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.add-course-btn:hover {
+    background: #1f5ed9;
+}
+
+/* Grid Layout */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+/* Course Card */
+.course-card {
+    background: #f4f6f9;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Title */
+.course-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Description */
+.course-desc {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Price */
+.course-price {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.status-available {
+    background: #d4f5dd;
+    color: #1f8f3a;
+}
+
+.status-unavailable {
+    background: #ffe0e0;
+    color: #c0392b;
+}
+
+/* Update Button */
+.update-btn {
+    background: #2b6ef2;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.update-btn:hover {
+    background: #1f5ed9;
+}
