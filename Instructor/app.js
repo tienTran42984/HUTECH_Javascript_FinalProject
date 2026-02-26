@@ -2,22 +2,26 @@ const courses = [
   {
     id: "C001",
     title: "Java Programming Basics",
-    description: "Introductory Java course. Through this course you will learn essential knowledge about Java programming language"
+    description: "Introductory Java course. Through this course you will learn essential knowledge about Java programming language",
+    price: 120
   },
   {
     id: "C002",
     title: "Web Development with JavaScript",
-    description: "Learn HTML, CSS, and JavaScript fundamentals."
+    description: "Learn HTML, CSS, and JavaScript fundamentals.",
+    price: 130
   },
   {
     id: "C003",
     title: "Database Fundamentals",
-    description: "SQL basics and database design."
+    description: "SQL basics and database design.",
+    price: 200
   },
   {
     id: "C004",
     title: "Classic Art Analysis",
-    description: "This course is everything you need to know about classic arts. Including a new way to behold them."
+    description: "This course is everything you need to know about classic arts. Including a new way to behold them.",
+    price: 100
   }
 ];
 
@@ -219,8 +223,9 @@ function setupAddingCourses() {
 
         const title = document.getElementById("courseTitle").value.trim();
         const description = document.getElementById("courseDesc").value.trim();
+        const price = document.getElementById("coursePrice").value.trim();
 
-        if(!title || !description){
+        if(!title || !description || !price){
             alert("Please fill all fields.");
             return;
         }
@@ -229,7 +234,8 @@ function setupAddingCourses() {
         const newCourse = {
             id: newCourseId,
             title: title,
-            description: description
+            description: description,
+            price: price
         }
         courses.push(newCourse)
 
