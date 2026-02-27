@@ -2,6 +2,7 @@ import { renderCourses, setupAddingCourses } from "./courses.js";
 import { setupAccountForm } from "./settings.js";
 import { renderSessions, setupAddingSession, setupEditSession } from "./sessions.js";
 import { renderExercise, setupExerciseImport } from "./exercises.js";
+import { setupDashboard } from "./dashboard.js";
 
 const navButtons = document.querySelectorAll(".nav-btn");
 const pageContainer = document.getElementById("pageContainer")
@@ -43,7 +44,9 @@ pageContainer.querySelectorAll("[data-goto]").forEach(btn => {
 
 export async function loadPage(pageName) {
     const res = await fetch(`${pageName}.html`);
+    console.log(res);
     const html = await res.text();
+    console.log(html)
     pageContainer.innerHTML = html;
 
     const titleMap = {
@@ -58,6 +61,10 @@ export async function loadPage(pageName) {
     if (activeBtn) activeBtn.classList.add("active");
 
     switch(pageName){
+        case "dashboard":
+            setupDashboard()
+            break;
+
         case "settings":
             setupAccountForm();
             break;
@@ -93,10 +100,7 @@ export async function loadPage(pageName) {
         case "add_exercises":
             setupExerciseImport()
             break;
-        
-        default:
-            pageContainer.innerHTML = "Page Not found"
     }
 }
 
-loadPage("dashboard");
+loadPage("dashboard")

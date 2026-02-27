@@ -1,19 +1,6 @@
 import { loadPage } from "./app.js";
 
-const sessions = [
-  {
-    sessionNo: 1,
-    courseId: "C001",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-  },
-  {
-    sessionNo: 2,
-    courseId: "C001",
-    videoUrl: "https://www.w3schools.com/html/movie.mp4",
-    pdfUrl: "https://www.africau.edu/images/default/sample.pdf"
-  }
-];
+let sessions = JSON.parse(localStorage.getItem("sessions")) || [];
 
 export function renderSessions() {
     const text = document.getElementById("sessionsForText");
@@ -114,6 +101,8 @@ export function renderSessions() {
             if(ok){
                 const index = sessions.findIndex(s => s.sessionNo === sessionNo);
                 sessions.splice(index, 1)
+                localStorage.setItem("sessions", JSON.stringify(sessions));
+
                 alert("Delete session successfully")
                 loadPage("sessions");
             }
@@ -186,6 +175,8 @@ export function setupAddingSession() {
         }
 
         sessions.push(newSession)
+        localStorage.setItem("sessions", JSON.stringify(sessions));
+
         alert(`Session ${newSession} added`);
         form.reset()
         loadPage("sessions")
@@ -234,8 +225,10 @@ export function setupEditSession(){
         if (pdfFile) session.pdfUrl = URL.createObjectURL(pdfFile)
 
         const index = sessions.findIndex(s => s.sessionNo === session.sessionNo)
-        if (index !== -1) sessions[index] = session
-
+        if (index !== -1){
+            sessions[index] = session
+            localStorage.setItem("sessions", JSON.stringify(sessions));
+        } 
         alert("Session updated")
         loadPage("sessions")
     })
