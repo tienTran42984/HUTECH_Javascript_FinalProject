@@ -79,10 +79,17 @@
 
             const users = JSON.parse(localStorage.getItem("users")) || [];
             const instructor = JSON.parse(localStorage.getItem("instructors")) || []
+            const employee = JSON.parse(localStorage.getItem("employees")) || []
+            console.log(employee);
 
             const instructorRecord = instructor.find(i => i.email.toLowerCase() === email)
+            const employeeRecord = employee.find(e => e.email.toLowerCase() === email)
+            console.log(employeeRecord)
 
-            const foundUser = users.find(u => u.id === instructorRecord.accountId && u.password === password)
+            const profile = instructorRecord || employeeRecord;
+            console.log(profile)
+
+            const foundUser = users.find(u => u.id === profile.accountId && u.password === password)
             console.log(foundUser)
 
             if(!foundUser){
