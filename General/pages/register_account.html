@@ -118,26 +118,35 @@
                 return;
             }
 
-            const user = JSON.parse(localStorage.getItem("users")) 
+            const student = JSON.parse(localStorage.getItem("students")) || []
+            const users = JSON.parse(localStorage.getItem("users")) || [];
 
-            const emailExists = user.some(u => u.email.toLowerCase() === emailValue);
+            const emailExists = student.some(s => s.email.toLowerCase() === emailValue);
             if (emailExists) {
                 showError("This email is already registered.");
                 return;
             }
 
+            const newAccountId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
             const newUser = {
-                id: user.length > 0 ? Math.max(...user.map(u => u.id)) + 1 : 1,
-                username: nameValue,
-                email: emailValue,
+                id: newAccountId,
+                username: nameValue.replace(/\s/g, ''),
                 password: passwordValue,
                 verified: false,
-                phone: "",   
                 role: "Learner"
             };
 
-            user.push(newUser);
-            localStorage.setItem("users", JSON.stringify(user));
+            const newStudent = {
+                id: `STU-${Date.now()}`,
+                name: nameValue,
+                email: emailValue,
+                accountId: newAccountId
+            };
+
+            users.push(newUser);
+            student.push(newStudent)
+            localStorage.setItem("users", JSON.stringify(users));
+            localStorage.setItem("students", JSON.stringify(student));
 
 
             const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();

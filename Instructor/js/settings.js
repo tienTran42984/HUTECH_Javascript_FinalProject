@@ -5,10 +5,12 @@ export function setupAccountForm() {
     const phoneDisplay = document.getElementById("phoneDisplay");
 
     const loginUser = JSON.parse(localStorage.getItem("loginUser"))
+    const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
+    const instructorDetail = instructors.find(i => i.accountId === loginUser.id);
 
     nameDisplay.value = loginUser.username;
-    emailDisplay.value = loginUser.email;
-    phoneDisplay.value = loginUser.phone;
+    emailDisplay.value = instructorDetail.email;
+    phoneDisplay.value = instructorDetail.phone;
 
     if(!passwordForm) return;
 

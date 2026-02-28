@@ -89,10 +89,16 @@
                 alert("Verified successfully!");
 
                 const users = JSON.parse(localStorage.getItem("users"))
-                const user = users.find(u => u.email === savedEmail)
+                const students = JSON.parse(localStorage.getItem("students")) || [];
 
-                if(user){
-                    user.verified = true
+                const studentRecord = students.find(s => s.email.toLowerCase() === savedEmail.toLowerCase());
+                
+                if(studentRecord){
+                    const userAccount = users.find(u => u.id === studentRecord.accountId);
+                    if (userAccount) {
+                        userAccount.verified = true;
+                        localStorage.setItem("users", JSON.stringify(users));
+                    }
                 }
 
                 localStorage.setItem("users", JSON.stringify(users));

@@ -30,7 +30,7 @@
                 <form id = "loginForm">
                     <div class="mb-4">
                         <input type="email" class="form-control form-control-lg" id="emailInput"
-                            placeholder="Email address" required>
+                            placeholder="Your Email" required>
                     </div>
 
                     <div class="mb-4">
@@ -57,9 +57,9 @@
 
     <script>
         const accounts = [
-            {id: 1, username: "Huong@13", email: "huongHi@gmail.com", password: "123", phone: "048285838", verified: true, role: "Learner"},
-            {id: 2, username: "BinhNguyen", email: "binh@gmail.com", password: "234", phone: "0284949292", verified: true, role: "Instructor"},
-            {id: 3, username: "LamSung@193", email: "lamSung@gmail.com", password: "456", phone: "094782953", verified: true, role: "Employee"}
+            {id: 1, username: "Huong@13", password: "123", verified: true, role: "Learner"},
+            {id: 2, username: "BinhNguyen", password: "234", verified: true, role: "Instructor"},
+            {id: 3, username: "LamSung@193", password: "456", verified: true, role: "Employee"}
         ]
 
         if (!localStorage.getItem("users")) {
@@ -78,8 +78,17 @@
             const password = passwordInput.value.trim()
 
             const users = JSON.parse(localStorage.getItem("users")) || [];
+            const instructor = JSON.parse(localStorage.getItem("instructors")) || []
+            const employee = JSON.parse(localStorage.getItem("employees")) || []
+            const student = JSON.parse(localStorage.getItem("students")) || []
 
-            const foundUser = users.find(u => u.email.toLowerCase() === email && u.password === password)
+            const instructorRecord = instructor.find(i => i.email.toLowerCase() === email)
+            const employeeRecord = employee.find(e => e.email.toLowerCase() === email)
+            const studentRecord = student.find(s => s.email.toLowerCase() === email)
+
+            const profile = instructorRecord || employeeRecord || studentRecord
+
+            const foundUser = users.find(u => u.id === profile.accountId && u.password === password)
             console.log(foundUser)
 
             if(!foundUser){
@@ -94,8 +103,12 @@
                 case "Instructor":
                     window.location.href = "../../Instructor/pages/index.html"
                     break
-                //case "Learner":
-                //case "Employee":
+                case "Employee":
+                    window.location.href = "../../Employee/pages/index.html"
+                    break
+                case "Learner":
+                    window.location.href = "../../Learner/pages/index.html"
+                    break
                 default:
                     alert("No user supported")
                     break
