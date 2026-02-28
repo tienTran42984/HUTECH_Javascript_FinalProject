@@ -24,10 +24,13 @@ const courses = [
     }
 ];
 
-export function courseRender(){
-    const courseGrid = document.getElementById("courseGrid")
+localStorage.setItem("courses", JSON.stringify(courses))
 
-    courseGrid.innerHTML = courses.map(course => 
+export function courseRender(courseList){
+    const courseGrid = document.getElementById("courseGrid")
+    const searchInput = document.getElementById("searchInput")
+
+    courseGrid.innerHTML = courseList.map(course => 
         `
             <div class="course-card">
                 <div>
@@ -52,6 +55,14 @@ export function courseRender(){
             </div>
         `
     ).join("")
+
+    searchInput.addEventListener("input", () => {
+        const courseList = JSON.parse(localStorage.getItem("courses")) || []
+        const input = searchInput.value.toLowerCase()
+
+        const filteredCourses = courseList.filter(c => c.title.toLocaleLowerCase().includes(input) || c.id.toLocaleLowerCase().includes(input))
+        courseRender(filteredCourses)
+    })
 
     document.querySelectorAll(".update-btn").forEach(btn => {
         btn.addEventListener("click", () => {

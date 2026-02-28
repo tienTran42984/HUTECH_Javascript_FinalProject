@@ -5,6 +5,8 @@ const pageContainer = document.getElementById("pageContainer")
 const pageTitle = document.getElementById("pageTitle")
 const logoutBtn = document.getElementById("logoutBtn")
 
+const courses = JSON.parse(localStorage.getItem("courses"))
+
 menuItems.forEach(item => {
     item.addEventListener("click", () => {
         const pageName = item.dataset.page
@@ -38,7 +40,7 @@ export async function loadPage(pageName){
         pageTitle.textContent = titleMap[pageName] || "Dashboard";
 
         if(pageName === "courses"){
-            courseRender();
+            courseRender(courses);
         }
 
         if(pageName === "editting_courses"){
