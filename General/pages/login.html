@@ -80,14 +80,13 @@
             const users = JSON.parse(localStorage.getItem("users")) || [];
             const instructor = JSON.parse(localStorage.getItem("instructors")) || []
             const employee = JSON.parse(localStorage.getItem("employees")) || []
-            console.log(employee);
+            const student = JSON.parse(localStorage.getItem("students")) || []
 
             const instructorRecord = instructor.find(i => i.email.toLowerCase() === email)
             const employeeRecord = employee.find(e => e.email.toLowerCase() === email)
-            console.log(employeeRecord)
+            const studentRecord = student.find(s => s.email.toLowerCase() === email)
 
-            const profile = instructorRecord || employeeRecord;
-            console.log(profile)
+            const profile = instructorRecord || employeeRecord || studentRecord
 
             const foundUser = users.find(u => u.id === profile.accountId && u.password === password)
             console.log(foundUser)
@@ -107,7 +106,9 @@
                 case "Employee":
                     window.location.href = "../../Employee/pages/index.html"
                     break
-                //case "Learner":
+                case "Learner":
+                    window.location.href = "../../Learner/pages/index.html"
+                    break
                 default:
                     alert("No user supported")
                     break
