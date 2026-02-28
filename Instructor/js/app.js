@@ -11,6 +11,9 @@ const userEmail = document.getElementById("userEmail");
 const logoutBtn = document.getElementById("logoutBtn");
 
 const loginUser = JSON.parse(localStorage.getItem("loginUser"))
+const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
+const instructorDetail = instructors.find(i => i.accountId === loginUser.id);
+
 console.log(loginUser)
 if(!loginUser){
     window.location.href = "../../General/pages/login.html"
@@ -20,7 +23,7 @@ if(loginUser.role !== "Instructor" || loginUser.verified === false) {
     window.location.href = "../../General/pages/login.html"
 }
 
-userEmail.textContent = loginUser.email;
+userEmail.textContent = instructorDetail.email;
 
 
 navButtons.forEach(btn => {
