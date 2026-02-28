@@ -101,14 +101,13 @@ export function setupAddingInstructor(){
 }
 
 export function setupEdittingInstructor(id){
-    const instructor = JSON.parse(localStorage.getItem("instructors")) || []
-    console.log(instructor)
-    const account = JSON.parse(localStorage.getItem("users")) || []
-    console.log(account)
+    const form = document.getElementById("addInstructorForm")
 
-    const selectedInstructor = instructor.find(i => i.id === id)
-    const selectedAccount = account.find(a => a.id === selectedInstructor.accountId);
-    console.log(selectedAccount)
+    const instructor = JSON.parse(localStorage.getItem("instructors")) || []
+    const account = JSON.parse(localStorage.getItem("users")) || []
+
+    let selectedInstructor = instructor.find(i => i.id === id)
+    let selectedAccount = account.find(a => a.id === selectedInstructor.accountId);
 
     document.getElementById("insName").value = selectedInstructor.name;
     document.getElementById("insEmail").value = selectedInstructor.email;
@@ -118,4 +117,39 @@ export function setupEdittingInstructor(id){
     document.getElementById("accUsername").value = selectedAccount.username;
     document.getElementById("accPassword").value = selectedAccount.password;
     document.getElementById("accRole").value = selectedAccount.role;
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
+        const accounts = JSON.parse(localStorage.getItem("users")) || [];
+
+        const name = document.getElementById("insName").value;
+        const email = document.getElementById("insEmail").value;
+        const phone = document.getElementById("insPhone").value;
+        const gender = document.getElementById("insGender").value;
+
+        const username = document.getElementById("accUsername").value;
+
+        const insIndex = instructors.findIndex(i => i.id === id);
+        const accIndex = accounts.findIndex(a => a.id === selectedInstructor.accountId);
+
+        instructors[insIndex] = {
+            id: id,
+            name: name,
+            email: email,
+            phone: phone,
+            gender: gender
+        }
+
+        accounts[accIndex] = {
+            username: username
+        }
+
+        localStorage.setItem("instructors", JSON.stringify(instructors));
+        localStorage.setItem("users", JSON.stringify(accounts));
+
+        alert("Instructor updated successfully!");
+        loadPage("instructors")
+    })
 }
