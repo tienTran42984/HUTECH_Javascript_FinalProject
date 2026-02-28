@@ -1,4 +1,4 @@
-import { courseRender } from "./courses.js"
+import { courseRender, LoadCourseToForm } from "./courses.js"
 
 const menuItems = document.querySelectorAll(".menu-item")
 const pageContainer = document.getElementById("pageContainer")
@@ -22,10 +22,7 @@ logoutBtn.addEventListener("click", () => {
     window.location.href = "../../General/pages/login.html";
 });
 
-async function loadPage(pageName){
-    const pageContainer = document.getElementById("pageContainer")
-    const pageTitle = document.getElementById("pageTitle")
-
+export async function loadPage(pageName){
     try{
         const res = await fetch(`${pageName}.html`)
         const html = await res.text()
@@ -43,10 +40,15 @@ async function loadPage(pageName){
         if(pageName === "courses"){
             courseRender();
         }
+
+        if(pageName === "editting_courses"){
+            const selectedCourseId = JSON.parse(localStorage.getItem("selectedCourseId"))
+            LoadCourseToForm(selectedCourseId)
+        }
     }catch(error){
         console.log(error);
         pageContainer.innerHTML = "<h4>Page not found</h4>";
     }
 }
 
-loadPage("Dashboard")
+loadPage("courses")

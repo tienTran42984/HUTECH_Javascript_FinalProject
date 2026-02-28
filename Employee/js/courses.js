@@ -1,3 +1,5 @@
+import { loadPage } from "./app.js";
+
 const courses = [
     {
         id: "C001",
@@ -37,16 +39,74 @@ export function courseRender(){
                     </span>
                 </div>
 
-                <button class="update-btn">
-                    <i class="bi bi-pencil-square"></i> Update
-                </button>
+                <div class="card-actions">
+                    <button class="update-btn" data-course-id="${course.id}">
+                        <i class="bi bi-pencil-square"></i> Update
+                    </button>
+
+                    ${course.status === "Unavailable" ? `<button class="delete-btn" data-course-id="${course.id}">
+                                                            <i class="bi bi-trash"></i> Delete
+                                                        </button>
+                                                        ` : ""}
+                </div>
             </div>
         `
     ).join("")
 
     document.querySelectorAll(".update-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            alert("Update course");
+            const selectedCourseId = btn.dataset.courseId
+            localStorage.setItem("selectedCourseId", JSON.stringify(selectedCourseId))
+            loadPage("editting_courses");
         })
     })
+
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const ok = confirm("Delete session " + btn.dataset.sessionId + "?");
+            const deletedCourseId = btn.dataset.courseId
+
+            if(ok){
+                const index = courses.findIndex(c => c.id === deletedCourseId)
+                courses.splice(index, 1)
+                alert("Deleted course successfully");
+                loadPage("courses")
+            }
+
+        })
+    })
+}
+
+export function LoadCourseToForm(courseId){
+    const editingForm = document.getElementById("addCourseForm")
+    const courseTitle = document.getElementById("courseTitle")
+    const courseDesc = document.getElementById("courseDesc")
+    const coursePrice = document.getElementById("coursePrice")
+    const courseStatus = document.getElementById("courseStatus")
+
+    const selectedCourse = courses.find(c => c.id === courseId)
+
+    courseTitle.value = selectedCourse.title;
+    courseDesc.value = selectedCourse.description;
+    coursePrice.value = selectedCourse.price;
+    courseStatus.value = selectedCourse.status;
+
+    editingForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        
+        const updatedCourse = {
+            id: courseId,
+            title: document.getElementById("courseTitle").value,
+            description: document.getElementById("courseDesc").value,
+            price: document.getElementById("coursePrice").value,
+            status: document.getElementById("courseStatus").value
+        }
+
+        const index = courses.findIndex(c => c.id === courseId);
+        courses[index] = updatedCourse;
+
+        alert(`Update course ${selectedCourse.title} successfully`)
+        loadPage("courses")
+    })
+
 }
