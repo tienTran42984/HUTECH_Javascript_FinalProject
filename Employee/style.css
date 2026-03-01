@@ -402,7 +402,7 @@ select.form-control {
     opacity: 0.6;
 }
 
-/*----------------MANAGE INSTRUCTOR----------------------*/
+/*----------------MANAGE INSTRUCTOR/EMPLOYEES----------------------*/
  .instructor-page {
     padding: 20px;
 }
@@ -510,7 +510,7 @@ select.form-control {
     font-size: 13px;
 }
 
-/*-----------------------ADDING INSTRUCTORS------------------*/
+/*-----------------------ADDING INSTRUCTORS/EMPLOYEES------------------*/
 .add-instructor-container {
     background: white;
     padding: 20px;
@@ -565,4 +565,11 @@ select.form-control {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+textarea {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    resize: vertical;
 }

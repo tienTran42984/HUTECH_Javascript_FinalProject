@@ -107,17 +107,15 @@ export function LoadCourseToForm(courseId){
 
     editingForm.addEventListener("submit", (e) => {
         e.preventDefault()
-        
-        const updatedCourse = {
-            id: courseId,
+
+        const index = courses.findIndex(c => c.id === courseId);
+        courses[index] = {
+            ...courses[index],
             title: document.getElementById("courseTitle").value,
             description: document.getElementById("courseDesc").value,
             price: document.getElementById("coursePrice").value,
             status: document.getElementById("courseStatus").value
         }
-
-        const index = courses.findIndex(c => c.id === courseId);
-        courses[index] = updatedCourse;
 
         alert(`Update course ${selectedCourse.title} successfully`)
         loadPage("courses")

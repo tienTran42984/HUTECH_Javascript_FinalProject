@@ -69,29 +69,29 @@ export function setupAddingInstructor(){
         const gender = document.getElementById("insGender").value
 
         const newInstructorId = "INS-" + String(instructors.length + 1).padStart(3, "0");
+        const newAccountId = account.length > 0 ? Math.max(...account.map(a => a.id)) + 1 : 1;
 
         const newInstructor = {
             id: newInstructorId,
             name,
             email,
             phone,
-            gender
+            gender,
+            accountId: newAccountId
         }
 
-        instructor.push(newInstructor)
-        localStorage.setItem("instructors", JSON.stringify(instructor))
-
         const newAccount = {
-            id: account.length + 1,
+            id: newAccountId,
             username: email.split("@")[0], // default username
-            email: email,
             password: "Default@123", // default password
-            phone: phone,
             verified: true,
             role: "Instructor"
         };
 
+        instructor.push(newInstructor)
         account.push(newAccount)
+
+        localStorage.setItem("instructors", JSON.stringify(instructor))
         localStorage.setItem("users", JSON.stringify(account))
 
         alert("New instructor and account created")
@@ -117,6 +117,7 @@ export function setupEdittingInstructor(id){
     document.getElementById("accUsername").value = selectedAccount.username;
     document.getElementById("accPassword").value = selectedAccount.password;
     document.getElementById("accRole").value = selectedAccount.role;
+    document.getElementById("accountStatus").value = selectedAccount.verified;
 
     form.addEventListener("submit", (e) => {
         e.preventDefault()
@@ -130,12 +131,13 @@ export function setupEdittingInstructor(id){
         const gender = document.getElementById("insGender").value;
 
         const username = document.getElementById("accUsername").value;
+        const status = document.getElementById("accountStatus").value;
 
         const insIndex = instructors.findIndex(i => i.id === id);
         const accIndex = accounts.findIndex(a => a.id === selectedInstructor.accountId);
 
         instructors[insIndex] = {
-            id: id,
+            ...instructors[insIndex],
             name: name,
             email: email,
             phone: phone,
@@ -143,7 +145,9 @@ export function setupEdittingInstructor(id){
         }
 
         accounts[accIndex] = {
-            username: username
+            ...accounts[accIndex],
+            username: username,
+            verified: status
         }
 
         localStorage.setItem("instructors", JSON.stringify(instructors));
