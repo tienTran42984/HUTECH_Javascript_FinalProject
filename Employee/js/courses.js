@@ -6,21 +6,24 @@ const courses = [
         title: "Java Programming Basics",
         description: "Introductory Java course. Through this course you will learn essential knowledge about Java programming language.",
         price: 199,
-        status: "Available"
+        status: "Available",
+        instructorId: "INS-001"
     },
     {
         id: "C002",
         title: "Web Development with JavaScript",
         description: "Learn HTML, CSS, and JavaScript fundamentals.",
         price: 149,
-        status: "Unavailable"
+        status: "Unavailable",
+        instructorId: "INS-001"
     },
     {
         id: "C003",
         title: "Database Fundamentals",
         description: "SQL basics and database design.",
         price: 129,
-        status: "Available"
+        status: "Available",
+        instructorId: "INS-001"
     }
 ];
 
@@ -104,17 +107,15 @@ export function LoadCourseToForm(courseId){
 
     editingForm.addEventListener("submit", (e) => {
         e.preventDefault()
-        
-        const updatedCourse = {
-            id: courseId,
+
+        const index = courses.findIndex(c => c.id === courseId);
+        courses[index] = {
+            ...courses[index],
             title: document.getElementById("courseTitle").value,
             description: document.getElementById("courseDesc").value,
             price: document.getElementById("coursePrice").value,
             status: document.getElementById("courseStatus").value
         }
-
-        const index = courses.findIndex(c => c.id === courseId);
-        courses[index] = updatedCourse;
 
         alert(`Update course ${selectedCourse.title} successfully`)
         loadPage("courses")

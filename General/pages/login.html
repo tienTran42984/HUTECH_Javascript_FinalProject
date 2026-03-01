@@ -88,14 +88,13 @@
 
             const profile = instructorRecord || employeeRecord || studentRecord
 
-            const foundUser = users.find(u => u.id === profile.accountId && u.password === password)
-            console.log(foundUser)
-
-            if(!foundUser){
+            if(!profile){
                 loginError.style.display = "block"
                 loginError.textContent = "Invalid email or password"
                 return;
             }
+
+            const foundUser = users.find(u => u.id === profile.accountId && u.password === password)    
 
             localStorage.setItem("loginUser", JSON.stringify(foundUser));
 

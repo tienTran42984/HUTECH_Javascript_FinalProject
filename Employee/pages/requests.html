@@ -1,0 +1,48 @@
+<div class="instructor-page">
+
+    <div class="page-header">
+        <div>
+            <h2>Manage Financial Request</h2>
+            <p>View, manage, and update financial requests profiles and details.</p>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" id="requestSearch" placeholder="Search request by name or course...">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Status</label>
+        <select id="requestStatus" class="form-control">
+            <option value="">All Status</option>
+            <option value="Processing">Processing</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="requestDate">
+    </div>
+
+    <div class="table-wrapper">
+        <table class="instructor-table">
+            <thead>
+                <tr>
+                    <th>Request Code</th>
+                    <th>Learner</th>
+                    <th>Course</th>
+                    <th>Submission Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="requestTable"></tbody>
+        </table>
+    </div>
+
+</div>
