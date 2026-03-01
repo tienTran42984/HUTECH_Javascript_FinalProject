@@ -1,32 +1,5 @@
 import { loadPage } from "./app.js";
 
-const courses = [
-  {
-    id: "C001",
-    title: "Java Programming Basics",
-    description: "Introductory Java course. Through this course you will learn essential knowledge about Java programming language",
-    price: 120
-  },
-  {
-    id: "C002",
-    title: "Web Development with JavaScript",
-    description: "Learn HTML, CSS, and JavaScript fundamentals.",
-    price: 130
-  },
-  {
-    id: "C003",
-    title: "Database Fundamentals",
-    description: "SQL basics and database design.",
-    price: 200
-  },
-  {
-    id: "C004",
-    title: "Classic Art Analysis",
-    description: "This course is everything you need to know about classic arts. Including a new way to behold them.",
-    price: 100
-  }
-];
-
 function generateNextCourseId(){
   if(courses.length === 0) return "C001";
 
@@ -37,9 +10,17 @@ function generateNextCourseId(){
 
 export function renderCourses() {
     const grid = document.getElementById("coursesGrid")
+
+    const loginUser = JSON.parse(localStorage.getItem("loginUser"))
+    const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
+    const courses = JSON.parse(localStorage.getItem("courses")) || []
+
+    const activeInstructor = instructors.find(i => i.accountId === loginUser.id);
+    const instructorCourse = courses.filter(c => c.instructorId === activeInstructor.id);
+
     if(!grid) return;
 
-    grid.innerHTML = courses.map(course => 
+    grid.innerHTML = instructorCourse.map(course => 
         `<div class="course-card">
             <div>
                 <h3 class="course-title">${course.title}</h3>
@@ -85,6 +66,10 @@ export function setupAddingCourses() {
         const description = document.getElementById("courseDesc").value.trim();
         const price = document.getElementById("coursePrice").value.trim();
 
+        const loginUser = JSON.parse(localStorage.getItem("loginUser"))
+        const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
+        const instructorDetail = instructors.find(i => i.accountId === loginUser.id);
+
         if(!title || !description || !price){
             alert("Please fill all fields.");
             return;
@@ -95,7 +80,8 @@ export function setupAddingCourses() {
             id: newCourseId,
             title: title,
             description: description,
-            price: price
+            price: price,
+            instructorId: instructorDetail.id
         }
         courses.push(newCourse)
 
