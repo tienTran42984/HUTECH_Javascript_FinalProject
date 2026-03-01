@@ -269,6 +269,11 @@
     color: #c0392b;
 }
 
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
 /* Update Button */
 .update-btn {
     background: #2b6ef2;
@@ -572,4 +577,12 @@ textarea {
     border-radius: 6px;
     border: 1px solid #ddd;
     resize: vertical;
+}
+
+/*------------------EDITTINGREQUESTS---------------------*/
+.proof-image {
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
 }

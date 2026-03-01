@@ -1,6 +1,6 @@
 const students = [
     {
-        id: "EMP-001",
+        id: "STD-001",
         name: "Huong Le",
         email: "huongle@gmail.com",
         accountId: 1

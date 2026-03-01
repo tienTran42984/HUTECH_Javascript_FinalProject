@@ -1,6 +1,7 @@
 import { courseRender, LoadCourseToForm } from "./courses.js"
 import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
 import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
+import { renderRequests, applyFilter, setupEdittingRequest } from "./requests.js"
 
 const menuItems = document.querySelectorAll(".menu-item")
 const pageContainer = document.getElementById("pageContainer")
@@ -52,7 +53,7 @@ export async function loadPage(pageName){
             courses: "Course Management",
             instructors: "Instructor Management",
             employees: "Employee Management",
-            financialRequests: "Financial Requests"
+            requests: "Financial Requests"
         };
         pageTitle.textContent = titleMap[pageName] || "Dashboard";
 
@@ -112,6 +113,21 @@ export async function loadPage(pageName){
         if(pageName === "editting_employees"){
             const selectedEmployeeId = JSON.parse(localStorage.getItem("selectedEmployeeId"))
             setupEdittingEmployee(selectedEmployeeId)
+        }
+
+        if(pageName === "requests"){
+            const requests = JSON.parse(localStorage.getItem("requests"))
+            renderRequests(requests)
+
+            document.getElementById("requestSearch").addEventListener("input", applyFilter);
+            document.getElementById("requestStatus").addEventListener("change", applyFilter);
+            document.getElementById("requestDate").addEventListener("change", applyFilter);
+
+        }
+
+        if(pageName === "editting_requests"){
+            const selectedRequestId = JSON.parse(localStorage.getItem("selectedRequestId"))
+            setupEdittingRequest(selectedRequestId)
         }
     }catch(error){
         console.log(error);
