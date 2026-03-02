@@ -1,0 +1,69 @@
+<div class="add-instructor-container">
+
+    <h3>Reviewing A Financial Request </h3>
+    
+    <form id="addRequestForm">
+        <div class="form-section">
+            <h4>Financial Request Information</h4>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Request Code</label>
+                    <input type="text" id="requestId" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Learner</label>
+                    <input type="text" id="learnerName" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Course</label>
+                    <input type="text" id="courseTitle" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Submission Date</label>
+                    <input type="date" id="requestDate" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Background</label>
+                    <input type="text" id="requestBackground" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Employement Status</label>
+                    <input type="text" id="requestEmployment" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="text" id="requestAmount" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Reason:</label>
+                    <textarea id="requestReason" class="form-control" rows="4" readonly></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Proof:</label>
+                    <img id="requestProof" class="proof-image">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Request's Status</label>
+                    <select id="requestStatus" class="form-control" required>
+                        <option value="Processing">Processing</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Declined">Declined</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Save Request</button>
+
+    </form>
+</div>
