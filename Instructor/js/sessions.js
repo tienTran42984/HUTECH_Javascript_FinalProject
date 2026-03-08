@@ -20,14 +20,16 @@ export function renderSessions() {
             <td>${courseSession.sessionNo}</td>
             <td>
                  <button class="action-btn video preview-video-btn"
-                    data-session-id="${courseSession.sessionNo}">
+                    data-session-id="${courseSession.sessionNo}"
+                    data-course-id="${courseSession.courseId}">
                     <i class="bi bi-play-circle"></i>
                     Preview Video
                 </button>
             </td>
             <td>
                 <button class="action-btn pdf preview-pdf-btn"
-                    data-session-id="${courseSession.sessionNo}">
+                    data-session-id="${courseSession.sessionNo}"
+                    data-course-id="${courseSession.courseId}">
                     <i class="bi bi-file-earmark-pdf"></i>
                     Preview PDF
                 </button>
@@ -35,19 +37,22 @@ export function renderSessions() {
             <td>
                 <div class="session-actions">
                     <button class="mini-btn edit edit-session-btn"
-                        data-session-id="${courseSession.sessionNo}">
+                        data-session-id="${courseSession.sessionNo}"
+                        data-course-id="${courseSession.courseId}">
                         <i class="bi bi-pencil-square"></i>
                         Edit
                     </button>
 
                     <button class="mini-btn exercise exercise-session-btn"
-                        data-session-id="${courseSession.sessionNo}">
+                        data-session-id="${courseSession.sessionNo}"
+                        data-course-id="${courseSession.courseId}">
                         <i class="bi bi-journal-text"></i>
                         Exercises
                     </button>
 
                     <button class="mini-btn delete delete-session-btn"
-                        data-session-id="${courseSession.sessionNo}">
+                        data-session-id="${courseSession.sessionNo}"
+                        data-course-id="${courseSession.courseId}">
                         <i class="bi bi-trash"></i>
                         Delete
                     </button>
@@ -65,7 +70,9 @@ export function renderSessions() {
         btn.addEventListener("click", () => {
             const sessionNo = Number(btn.dataset.sessionId)
             console.log(sessionNo);
-            const session = sessions.find(s => s.sessionNo === sessionNo)
+            const courseId = btn.dataset.courseId
+
+            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === courseId)
             console.log(session);
 
             if (!session || !session.pdfUrl) {
@@ -81,7 +88,9 @@ export function renderSessions() {
         btn.addEventListener("click", () => {
             const sessionNo = Number(btn.dataset.sessionId)
             console.log(sessionNo)
-            const session = sessions.find(s => s.sessionNo === sessionNo)
+            const courseId = btn.dataset.courseId
+
+            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === courseId)
             console.log(session)
 
             if (!session || !session.videoUrl) {
@@ -97,9 +106,10 @@ export function renderSessions() {
         btn.addEventListener("click", () => {
             const ok = confirm("Delete session " + btn.dataset.sessionId + "?");
             const sessionNo = Number(btn.dataset.sessionId)
+            const courseId = btn.dataset.courseId
 
             if(ok){
-                const index = sessions.findIndex(s => s.sessionNo === sessionNo);
+                const index = sessions.findIndex(s => s.sessionNo === sessionNo && s.courseId === courseId);
                 sessions.splice(index, 1)
                 localStorage.setItem("sessions", JSON.stringify(sessions));
 
@@ -123,8 +133,11 @@ export function renderSessions() {
     document.querySelectorAll(".exercise-session-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const sessionNo = Number(btn.dataset.sessionId);
+            const courseId = btn.dataset.courseId
+            console.log("Searching for:", { sessionNo, courseId });
 
-            const session = sessions.find(s => s.sessionNo === sessionNo);
+            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === courseId);
+            console.log("Available sessions:", sessions);
             localStorage.setItem("selectedSession", JSON.stringify(session));
 
             loadPage("exercises");

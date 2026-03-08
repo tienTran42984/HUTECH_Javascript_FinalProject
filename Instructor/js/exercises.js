@@ -24,7 +24,9 @@ export function renderExercise(){
                 <td>${ex.answer}</td>
                 <td>
                     <button class="mini-btn delete delete-ex-btn"
-                        data-exercise-no="${ex.exerciseNo}">
+                        data-exercise-no="${ex.exerciseNo}"
+                        data-session-no="${ex.sessionNo}"
+                        data-course-id="${ex.courseId}">
                         <i class="bi bi-trash"></i>
                         Delete
                     </button>
@@ -40,7 +42,10 @@ export function renderExercise(){
 
             if(ok){
                 const exerciseNo = btn.dataset.exerciseNo
-                const index = exercise.findIndex(e => e.exerciseNo === exerciseNo);
+                const sessionNo = btn.dataset.sessionNo
+                const courseId = btn.dataset.courseId
+
+                const index = exercise.findIndex(e => e.exerciseNo === exerciseNo && e.courseId === courseId && e.sessionNo === sessionNo);
                 exercise.splice(index, 1)
                 localStorage.setItem("exercises", JSON.stringify(exercise))
                 alert("Delete session successfully")
@@ -108,7 +113,7 @@ export function setupExerciseImport() {
 
         const allExercises = JSON.parse(localStorage.getItem("exercises")) || [];
         console.log(allExercises)
-        const filtered = allExercises.filter(ex => ex.sessionNo !== selectedSession.sessionNo);
+        const filtered = allExercises.filter(ex => !(ex.sessionNo === selectedSession.sessionNo && ex.courseId === selectedSession.courseId));
         console.log(filtered)
 
         const updated = [...filtered, ...exercise];
