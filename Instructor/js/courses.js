@@ -1,6 +1,6 @@
 import { loadPage } from "./app.js";
 
-function generateNextCourseId(){
+function generateNextCourseId(courses){
   if(courses.length === 0) return "C001";
 
   const maxNum = Math.max(...courses.map(c => Number(c.id.replace("C", ""))));
@@ -66,6 +66,7 @@ export function setupAddingCourses() {
         const description = document.getElementById("courseDesc").value.trim();
         const price = document.getElementById("coursePrice").value.trim();
 
+        const courses = JSON.parse(localStorage.getItem("courses")) || [];
         const loginUser = JSON.parse(localStorage.getItem("loginUser"))
         const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
         const instructorDetail = instructors.find(i => i.accountId === loginUser.id);
@@ -75,7 +76,7 @@ export function setupAddingCourses() {
             return;
         }
 
-        const newCourseId = generateNextCourseId()
+        const newCourseId = generateNextCourseId(courses)
         const newCourse = {
             id: newCourseId,
             title: title,
@@ -84,6 +85,7 @@ export function setupAddingCourses() {
             instructorId: instructorDetail.id
         }
         courses.push(newCourse)
+        localStorage.setItem("courses", JSON.stringify(courses));
 
         alert("Course added!");
         loadPage("courses");

@@ -90,11 +90,17 @@
 
             if(!profile){
                 loginError.style.display = "block"
-                loginError.textContent = "Invalid email or password"
+                loginError.textContent = "Invalid email"
                 return;
             }
 
             const foundUser = users.find(u => u.id === profile.accountId && u.password === password)    
+
+            if(!foundUser){
+                loginError.style.display = "block"
+                loginError.textContent = "Invalid password"
+                return;
+            }
 
             localStorage.setItem("loginUser", JSON.stringify(foundUser));
 
