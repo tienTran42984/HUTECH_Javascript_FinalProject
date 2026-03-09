@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learner Dashboard</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo"></div>
+                <h2>E-Learning</h2>
+            </div>
+
+            <div class="menu-title">Learner</div>
+            <nav>
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="courses.html">Explore Courses</a>
+                <a href="my_learning.html">My Learning</a>
+                <a href="session.html">Sessions</a>
+                <a href="payment.html">Payments</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="topbar">
+                <div class="search-box">
+                    <input type="text" placeholder="Search courses, instructors, lessons...">
+                </div>
+                <div class="topbar-right">
+                    <button class="btn btn-outline">Notifications</button>
+                    <div class="avatar"></div>
+                </div>
+            </div>
+
+            <div class="hero">
+                <div>
+                    <h2>Continue your learning journey today</h2>
+                    <p>
+                        Track your progress, explore new courses, and stay on top of your upcoming lessons with a clean learner dashboard.
+                    </p>
+                    <button class="btn btn-outline">View My Courses</button>
+                </div>
+
+                <div class="hero-card">
+                    <h3 style="margin-bottom: 10px;">Your Weekly Progress</h3>
+                    <p style="margin-bottom: 12px;">You completed 4 lessons this week.</p>
+                    <div class="progress-wrap">
+                        <div class="progress-bar" style="width: 72%;"></div>
+                    </div>
+                    <small>72% learning goal completed</small>
+                </div>
+            </div>
+
+            <div class="grid-4">
+                <div class="stat-card">
+                    <p>Enrolled Courses</p>
+                    <h3>08</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Completed Lessons</p>
+                    <h3>24</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Certificates</p>
+                    <h3>03</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Study Hours</p>
+                    <h3>56h</h3>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">Continue Learning</h2>
+                <div class="course-grid">
+                    <div class="course-card">
+                        <div class="course-thumb">
+                            <span class="course-badge">Programming</span>
+                        </div>
+                        <div class="course-body">
+                            <h3>JavaScript Basics</h3>
+                            <div class="course-meta">
+                                <span>8 lessons</span>
+                                <span>Beginner</span>
+                            </div>
+                            <p class="course-desc">Build strong foundations in JavaScript syntax, DOM, and events.</p>
+                            <div class="progress-wrap">
+                                <div class="progress-bar" style="width: 65%;"></div>
+                            </div>
+                            <div class="course-footer">
+                                <span class="price">65% completed</span>
+                                <button class="btn btn-primary">Resume</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-thumb">
+                            <span class="course-badge">Design</span>
+                        </div>
+                        <div class="course-body">
+                            <h3>UI/UX Design Fundamentals</h3>
+                            <div class="course-meta">
+                                <span>12 lessons</span>
+                                <span>Intermediate</span>
+                            </div>
+                            <p class="course-desc">Learn layout, spacing, color systems, and wireframing principles.</p>
+                            <div class="progress-wrap">
+                                <div class="progress-bar" style="width: 40%;"></div>
+                            </div>
+                            <div class="course-footer">
+                                <span class="price">40% completed</span>
+                                <button class="btn btn-primary">Resume</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

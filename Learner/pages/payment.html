@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo"></div>
+                <h2>E-Learning</h2>
+            </div>
+
+            <div class="menu-title">Learner</div>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="courses.html">Explore Courses</a>
+                <a href="my_learning.html">My Learning</a>
+                <a href="payment.html" class="active">Payments</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="page-header">
+                <div>
+                    <h1>Checkout</h1>
+                    <p>Complete your purchase securely to start learning.</p>
+                </div>
+            </div>
+
+            <form id="paymentForm" class="form-card">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name">
+                        <small class="error-text" id="nameError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email">
+                        <small class="error-text" id="emailError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="phone" placeholder="Enter your phone number">
+                        <small class="error-text" id="phoneError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="paymentMethod">
+                            <option value="">Select payment method</option>
+                            <option value="payos">PayOS</option>
+                            <option value="momo">MoMo</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                        <small class="error-text" id="methodError"></small>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Billing Note</label>
+                        <textarea rows="4" placeholder="Optional note for your order"></textarea>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; flex-wrap:wrap; gap:12px;">
+                    <div>
+                        <p style="color: var(--muted);">Order Total</p>
+                        <h2 style="color: var(--primary);">299,000 VND</h2>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/payment.js"></script>
+</body>
+</html>
