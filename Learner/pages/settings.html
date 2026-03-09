@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo"></div>
+                <h2>E-Learning</h2>
+            </div>
+
+            <div class="menu-title">Learner</div>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="courses.html">Explore Courses</a>
+                <a href="my_learning.html">My Learning</a>
+                <a href="settings.html" class="active">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="page-header">
+                <div>
+                    <h1>Profile Settings</h1>
+                    <p>Manage your personal information and display preferences.</p>
+                </div>
+            </div>
+
+            <form id="settingsForm" class="form-card">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="learnerName" placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="learnerEmail" placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Avatar URL</label>
+                        <input type="text" id="avatarUrl" placeholder="Paste your avatar URL">
+                    </div>
+
+                    <div class="form-group full" style="display:flex; justify-content:space-between; align-items:center;">
+                        <label for="darkModeToggle" style="margin-bottom:0;">Enable Dark Mode</label>
+                        <input type="checkbox" id="darkModeToggle" style="width:20px; height:20px;">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Courses</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo"></div>
+                <h2>E-Learning</h2>
+            </div>
+
+            <div class="menu-title">Learner</div>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="courses.html" class="active">Explore Courses</a>
+                <a href="my_learning.html">My Learning</a>
+                <a href="session.html">Sessions</a>
+                <a href="payment.html">Payments</a>
+                <a href="settings.html">Settings</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="page-header">
+                <div>
+                    <h1>Explore Courses</h1>
+                    <p>Browse courses that match your goals and skill level.</p>
+                </div>
+                <button class="btn btn-primary">Top Rated Courses</button>
+            </div>
+
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <input type="text" id="searchInput" placeholder="Search course title...">
+                    </div>
+                    <div class="filter-item">
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Design">Design</option>
+                            <option value="Marketing">Marketing</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <select id="priceFilter">
+                            <option value="all">All Prices</option>
+                            <option value="free">Free</option>
+                            <option value="paid">Paid</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <section id="courseList" class="course-grid"></section>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/courses.js"></script>
+</body>
+</html>
