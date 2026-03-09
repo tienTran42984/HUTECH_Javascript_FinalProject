@@ -55,68 +55,49 @@
         </div>
     </body>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        const accounts = [
-            {id: 1, username: "Huong@13", password: "123", verified: true, role: "Learner"},
-            {id: 2, username: "BinhNguyen", password: "234", verified: true, role: "Instructor"},
-            {id: 3, username: "LamSung@193", password: "456", verified: true, role: "Employee"}
-        ]
-
-        if (!localStorage.getItem("users")) {
-            localStorage.setItem("users", JSON.stringify(accounts));
-        }
-
         const loginForm = document.getElementById("loginForm")
         const emailInput = document.getElementById("emailInput")
         const passwordInput = document.getElementById("passwordInput")
         const loginError = document.getElementById("loginError");
 
-        loginForm.addEventListener("submit", (e) => {
+        loginForm.addEventListener("submit", async (e) => {
             e.preventDefault()
 
-            const email = emailInput.value.trim().toLowerCase()
+            const email = emailInput.value.trim()
             const password = passwordInput.value.trim()
 
-            const users = JSON.parse(localStorage.getItem("users")) || [];
-            const instructor = JSON.parse(localStorage.getItem("instructors")) || []
-            const employee = JSON.parse(localStorage.getItem("employees")) || []
-            const student = JSON.parse(localStorage.getItem("students")) || []
+            try{
 
-            const instructorRecord = instructor.find(i => i.email.toLowerCase() === email)
-            const employeeRecord = employee.find(e => e.email.toLowerCase() === email)
-            const studentRecord = student.find(s => s.email.toLowerCase() === email)
+                const response = await axios.post(
+                    "http://localhost:5000/api/login",
+                    { email,password }
+                )
 
-            const profile = instructorRecord || employeeRecord || studentRecord
+                const user = response.data.user
 
-            if(!profile){
+                localStorage.setItem("loginUser", JSON.stringify(user))
+
+                switch(user.role){
+
+                    case "Instructor":
+                        window.location.href="../../Instructor/pages/index.html"
+                        break
+
+                    case "Employee":
+                        window.location.href="../../Employee/pages/index.html"
+                        break
+
+                    case "Learner":
+                        window.location.href="../../Learner/pages/index.html"
+                        break
+                }
+
+            }catch(err){
+
                 loginError.style.display = "block"
-                loginError.textContent = "Invalid email"
-                return;
-            }
-
-            const foundUser = users.find(u => u.id === profile.accountId && u.password === password)    
-
-            if(!foundUser){
-                loginError.style.display = "block"
-                loginError.textContent = "Invalid password"
-                return;
-            }
-
-            localStorage.setItem("loginUser", JSON.stringify(foundUser));
-
-            switch(foundUser.role){
-                case "Instructor":
-                    window.location.href = "../../Instructor/pages/index.html"
-                    break
-                case "Employee":
-                    window.location.href = "../../Employee/pages/index.html"
-                    break
-                case "Learner":
-                    window.location.href = "../../Learner/pages/index.html"
-                    break
-                default:
-                    alert("No user supported")
-                    break
+                loginError.textContent = err.response.data.message
             }
         })
     </script>
