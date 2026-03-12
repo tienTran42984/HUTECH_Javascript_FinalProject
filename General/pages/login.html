@@ -79,7 +79,7 @@
 
                 localStorage.setItem("loginUser", JSON.stringify(user))
 
-                switch(user.role){
+                switch(user.Account_Roles){
 
                     case "Instructor":
                         window.location.href="../../Instructor/pages/index.html"
@@ -90,7 +90,7 @@
                         break
 
                     case "Learner":
-                        window.location.href="../../Learner/pages/index.html"
+                        window.location.href="../../Learner/pages/dashboard.html"
                         break
                 }
 

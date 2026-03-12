@@ -18,12 +18,12 @@ console.log(loginUser)
 if(!loginUser){
     window.location.href = "../../General/pages/login.html"
 }
-if(loginUser.role !== "Instructor" || loginUser.verified === false) {
+if(loginUser.Account_Roles !== "Instructor" || loginUser.Account_Status === false) {
     alert("Access denied!")
     window.location.href = "../../General/pages/login.html"
 }
 
-userEmail.textContent = instructorDetail.email;
+userEmail.textContent = loginUser.email;
 
 
 navButtons.forEach(btn => {

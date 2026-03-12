@@ -14,6 +14,6 @@ export function setupDashboard() {
     
     const displayMail = document.getElementById("displayMail")
     if(loginUser){
-        displayMail.textContent = instructorDetail.email
+        displayMail.textContent = loginUser.email
     }
 }
