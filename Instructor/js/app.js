@@ -1,4 +1,4 @@
-import { renderCourses, setupAddingCourses } from "./courses.js";
+import { renderCourses, setupAddingCourses, setupEditCourse } from "./courses.js";
 import { setupAccountForm } from "./settings.js";
 import { renderSessions, setupAddingSession, setupEditSession } from "./sessions.js";
 import { renderExercise, setupExerciseImport } from "./exercises.js";
@@ -94,6 +94,10 @@ export async function loadPage(pageName) {
         
         case "add_courses":
             setupAddingCourses()
+            break;
+
+        case "edit_courses":
+            setupEditCourse()
             break;
         
         case "exercises":

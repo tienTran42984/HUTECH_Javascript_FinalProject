@@ -615,3 +615,100 @@ input:disabled {
   border-radius: 12px;
 }
 
+.search-box {
+    position: relative;
+    max-width: 400px;
+    margin-bottom: 15px;
+}
+
+.suggestions-box {
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #f5f5f5;
+}
+
+/* Average rating section */
+#avgRating {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Each feedback item */
+.feedback-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Space stars and text */
+.feedback-item > div {
+    margin-bottom: 6px;
+}
+
+/* Comment text */
+.feedback-item p {
+    margin: 6px 0 8px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+/* Author */
+.feedback-item small {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/* Optional hover effect (nice UX) */
+.feedback-item:hover {
+    background: #fafafa;
+    border-radius: 6px;
+    padding-left: 8px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.page-btn {
+    border: none;
+    background: #f3f4f6;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.page-btn:hover {
+    background: #e5e7eb;
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 0.9rem;
+    color: #555;
+}
+

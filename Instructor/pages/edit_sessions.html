@@ -5,13 +5,17 @@
   </h3>
 
   <form id="editSessionForm">
+    <div class="form-group">
+      <label class="form-label">Session Title</label>
+      <input type="text" id="sessionTitle" class="form-control" required>
+    </div>
 
     <div class="preview-area">
-        <div class="preview-box">
-            <p class="preview-title">Video Preview</p>
-            <video id="videoPreview" controls style="display:none;"></video>
-            <p id="videoEmptyText" class="empty-preview">No video currently</p>
-        </div>
+      <div class="preview-box">
+        <p class="preview-title">Video Preview</p>
+        <video id="videoPreview" controls style="display:none;"></video>
+        <p id="videoEmptyText" class="empty-preview">No video currently</p>
+      </div>
     </div>
 
     <div class="form-group">
