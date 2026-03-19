@@ -29,7 +29,7 @@ const coursesData = [
         instructor: "David Lee",
         category: "Marketing",
         level: "Beginner",
-        price: 199000,
+        price: 0,
         image: "../assets/images/marketing-course.jpg",
         lessons: 10,
         rating: 4.6,
