@@ -1,4 +1,4 @@
-import { renderCourses, setupAddingCourses } from "./courses.js";
+import { renderCourses, setupAddingCourses, setupEditCourse } from "./courses.js";
 import { setupAccountForm } from "./settings.js";
 import { renderSessions, setupAddingSession, setupEditSession } from "./sessions.js";
 import { renderExercise, setupExerciseImport } from "./exercises.js";
@@ -18,12 +18,12 @@ console.log(loginUser)
 if(!loginUser){
     window.location.href = "../../General/pages/login.html"
 }
-if(loginUser.role !== "Instructor" || loginUser.verified === false) {
+if(loginUser.Account_Roles !== "Instructor" || loginUser.Account_Status === false) {
     alert("Access denied!")
     window.location.href = "../../General/pages/login.html"
 }
 
-userEmail.textContent = instructorDetail.email;
+userEmail.textContent = loginUser.email;
 
 
 navButtons.forEach(btn => {
@@ -94,6 +94,10 @@ export async function loadPage(pageName) {
         
         case "add_courses":
             setupAddingCourses()
+            break;
+
+        case "edit_courses":
+            setupEditCourse()
             break;
         
         case "exercises":

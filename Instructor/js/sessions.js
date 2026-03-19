@@ -1,35 +1,35 @@
 import { loadPage } from "./app.js";
+import api from "../../axios/axios.js"
 
-let sessions = JSON.parse(localStorage.getItem("sessions")) || [];
-
-export function renderSessions() {
+export async function renderSessions() {
     const text = document.getElementById("sessionsForText");
     const sessionsBody = document.getElementById("sessionsBody");
     const addSessionBtn = document.getElementById("addSessionBtn");
-    const course = JSON.parse(localStorage.getItem("selectedCourse"));
-
-    const courseSessions = sessions.filter(s => s.courseId === course.id);
     const backBtn = document.getElementById("backToCoursesBtn");
+
+    const course = JSON.parse(localStorage.getItem("selectedCourse"));
 
     if (!text) return;
     text.textContent = course ? `Sessions for course: ${course.title}` : "No course selected";
 
-    sessionsBody.innerHTML = courseSessions.map(courseSession => 
+    const res = await api.get(`/courses/${course.id}/sessions`)
+    const sessions = await res.data || [];
+
+    sessionsBody.innerHTML = sessions.map((s, index) =>
         `
         <tr>
-            <td>${courseSession.sessionNo}</td>
+            <td>${index + 1}</td>
+            <td>${s.sessionTitle}</td>
             <td>
                  <button class="action-btn video preview-video-btn"
-                    data-session-id="${courseSession.sessionNo}"
-                    data-course-id="${courseSession.courseId}">
+                    data-video="${s.sessionVideo}">
                     <i class="bi bi-play-circle"></i>
                     Preview Video
                 </button>
             </td>
             <td>
                 <button class="action-btn pdf preview-pdf-btn"
-                    data-session-id="${courseSession.sessionNo}"
-                    data-course-id="${courseSession.courseId}">
+                    data-pdf="${s.sessionDocument}">
                     <i class="bi bi-file-earmark-pdf"></i>
                     Preview PDF
                 </button>
@@ -37,22 +37,22 @@ export function renderSessions() {
             <td>
                 <div class="session-actions">
                     <button class="mini-btn edit edit-session-btn"
-                        data-session-id="${courseSession.sessionNo}"
-                        data-course-id="${courseSession.courseId}">
+                        data-session-id="${s.sessionId}"
+                        data-course-id="${s.courseId}">
                         <i class="bi bi-pencil-square"></i>
                         Edit
                     </button>
 
                     <button class="mini-btn exercise exercise-session-btn"
-                        data-session-id="${courseSession.sessionNo}"
-                        data-course-id="${courseSession.courseId}">
+                        data-session-id="${s.sessionId}"
+                        data-course-id="${s.courseId}">
                         <i class="bi bi-journal-text"></i>
                         Exercises
                     </button>
 
                     <button class="mini-btn delete delete-session-btn"
-                        data-session-id="${courseSession.sessionNo}"
-                        data-course-id="${courseSession.courseId}">
+                        data-session-id="${s.sessionId}"
+                        data-course-id="${s.courseId}">
                         <i class="bi bi-trash"></i>
                         Delete
                     </button>
@@ -68,62 +68,49 @@ export function renderSessions() {
 
     document.querySelectorAll(".preview-pdf-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const sessionNo = Number(btn.dataset.sessionId)
-            console.log(sessionNo);
-            const courseId = btn.dataset.courseId
-
-            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === courseId)
-            console.log(session);
-
-            if (!session || !session.pdfUrl) {
+            const pdfPath = btn.dataset.pdf
+            if (!pdfPath) {
                 alert("No PDF available for this session.");
                 return;
             }
-
-            window.open(session.pdfUrl, "_blank")
+            window.open(`http://localhost:5000/${pdfPath}`, "_blank")
         })
     })
 
     document.querySelectorAll(".preview-video-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const sessionNo = Number(btn.dataset.sessionId)
-            console.log(sessionNo)
-            const courseId = btn.dataset.courseId
-
-            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === courseId)
-            console.log(session)
-
-            if (!session || !session.videoUrl) {
+            const videoPath = btn.dataset.video
+            if (!videoPath) {
                 alert("No video available for this session.");
                 return;
             }
-
-            window.open(session.videoUrl, "_blank");
+            window.open(`http://localhost:5000/${videoPath}`, "_blank")
         })
     })
 
     document.querySelectorAll(".delete-session-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", async () => {
             const ok = confirm("Delete session " + btn.dataset.sessionId + "?");
-            const sessionNo = Number(btn.dataset.sessionId)
+            const sessionId = btn.dataset.sessionId
             const courseId = btn.dataset.courseId
+            if (!ok) return
 
-            if(ok){
-                const index = sessions.findIndex(s => s.sessionNo === sessionNo && s.courseId === courseId);
-                sessions.splice(index, 1)
-                localStorage.setItem("sessions", JSON.stringify(sessions));
-
-                alert("Delete session successfully")
-                loadPage("sessions");
+            try {
+                await api.delete(`/courses/${courseId}/sessions/${sessionId}`)
+                alert("Session deleted successfully")
+                loadPage("sessions")
+            } catch (err) {
+                console.log(err)
+                alert("Delete session failed")
             }
         })
     })
 
     document.querySelectorAll(".edit-session-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const sessionNo =  Number(btn.dataset.sessionId)
+            const sessionNo = btn.dataset.sessionId
             const course = JSON.parse(localStorage.getItem("selectedCourse"))
-            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === course.id)
+            const session = sessions.find(s => s.sessionId === sessionNo && s.courseId === course.id)
 
             localStorage.setItem("editingSession", JSON.stringify(session))
             loadPage("edit_sessions")
@@ -132,14 +119,9 @@ export function renderSessions() {
 
     document.querySelectorAll(".exercise-session-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const sessionNo = Number(btn.dataset.sessionId);
+            const sessionId = btn.dataset.sessionId;
             const courseId = btn.dataset.courseId
-            console.log("Searching for:", { sessionNo, courseId });
-
-            const session = sessions.find(s => s.sessionNo === sessionNo && s.courseId === courseId);
-            console.log("Available sessions:", sessions);
-            localStorage.setItem("selectedSession", JSON.stringify(session));
-
+            localStorage.setItem("selectedSession", JSON.stringify({ sessionId, courseId }))
             loadPage("exercises");
         });
     });
@@ -151,7 +133,7 @@ export function renderSessions() {
 
 export function setupAddingSession() {
     const form = document.getElementById("addSessionForm")
-    
+
     const videoInput = document.getElementById("videoFile")
     const videoPreview = document.getElementById("videoPreview")
     const videoEmpty = document.getElementById("videoEmptyText")
@@ -165,39 +147,50 @@ export function setupAddingSession() {
         videoEmpty.style.display = "none";
     })
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault()
 
         const course = JSON.parse(localStorage.getItem("selectedCourse"))
+
+        const title = document.getElementById("sessionTitle").value
         const videoFile = document.getElementById("videoFile").files[0]
         const pdfFile = document.getElementById("pdfFile").files[0]
 
-        if (!videoFile && !pdfFile) {
+        if (!videoFile || !pdfFile) {
             alert("Please upload both MP4 and PDF.");
             return;
         }
 
-        const courseSessions = sessions.filter(s => s.courseId === course.id);
-        const nextSessionNo = courseSessions.length > 0 ? Math.max(...courseSessions.map(s => s.sessionNo)) + 1 : 1
-        
-        const newSession = {
-            sessionNo: nextSessionNo,
-            courseId: course.id,
-            videoUrl: URL.createObjectURL(videoFile),
-            pdfUrl: URL.createObjectURL(pdfFile)
+        if (!title) {
+            alert("Please fill in the title");
+            return;
         }
 
-        sessions.push(newSession)
-        localStorage.setItem("sessions", JSON.stringify(sessions));
+        const formData = new FormData()
 
-        alert(`Session ${newSession} added`);
-        form.reset()
-        loadPage("sessions")
+        formData.append("title", title)
+        formData.append("video", videoFile)
+        formData.append("pdf", pdfFile)
+
+        try {
+            await api.post(`/courses/${course.id}/sessions`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
+            alert("Session added successfully")
+            form.reset()
+            loadPage("sessions")
+        } catch (err) {
+            console.log(err)
+            alert("Adding session failed")
+        }
     })
 }
 
-export function setupEditSession(){
+export function setupEditSession() {
     const form = document.getElementById("editSessionForm")
+    const titleInput = document.getElementById("sessionTitle")
     const videoPreview = document.getElementById("videoPreview")
     const videoEmpty = document.getElementById("videoEmptyText")
     const viewPdfBtn = document.getElementById("previewPdf");
@@ -208,15 +201,16 @@ export function setupEditSession(){
     console.log(session)
     console.log(session.videoUrl);
 
-    if(session.videoUrl){
-        console.log(session.videoUrl);
-        videoPreview.src = session.videoUrl
+    titleInput.value = session.sessionTitle
+
+    if (session.sessionVideo) {
+        videoPreview.src = `http://localhost:5000/${session.sessionVideo}`
         videoPreview.style.display = "block"
         videoEmpty.style.display = "none"
     }
 
     viewPdfBtn.addEventListener("click", () => {
-        window.open(session.pdfUrl, "_blank")
+        window.open(`http://localhost:5000/${session.sessionDocument}`, "_blank")
     })
 
     newVideo.addEventListener("change", () => {
@@ -228,21 +222,35 @@ export function setupEditSession(){
         videoEmpty.style.display = "none";
     })
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault()
 
+        const title = titleInput.value;
         const videoFile = newVideo.files[0]
         const pdfFile = newPdf.files[0]
+        const formData = new FormData()
 
-        if (videoFile) session.videoUrl = URL.createObjectURL(videoFile)
-        if (pdfFile) session.pdfUrl = URL.createObjectURL(pdfFile)
+        formData.append("title", title)
+        if (videoFile) {
+            formData.append("video", videoFile)
+        }
+        if (pdfFile) {
+            formData.append("pdf", pdfFile)
+        }
 
-        const index = sessions.findIndex(s => s.sessionNo === session.sessionNo)
-        if (index !== -1){
-            sessions[index] = session
-            localStorage.setItem("sessions", JSON.stringify(sessions));
-        } 
-        alert("Session updated")
-        loadPage("sessions")
+        try {
+            await api.put(`/courses/${session.courseId}/sessions/${session.sessionId}`, formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            )
+            alert("Session updated successfully")
+            loadPage("sessions")
+        } catch (err) {
+            console.log(err)
+            alert("Updating session failed")
+        }
     })
 }

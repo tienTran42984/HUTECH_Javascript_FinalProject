@@ -1,6 +1,7 @@
 import { loadPage } from "./app.js";
+import api from "../../axios/axios.js"
 
-export function renderExercise(){
+export async function renderExercise() {
     const text = document.getElementById("exerciseForText");
     const exerciseBody = document.getElementById("exerciseBody");
     const addExerciseBtn = document.getElementById("addExerciseBtn");
@@ -8,25 +9,23 @@ export function renderExercise(){
 
     const course = JSON.parse(localStorage.getItem("selectedCourse"));
     const session = JSON.parse(localStorage.getItem("selectedSession"));
-    const exercises = JSON.parse(localStorage.getItem("exercises")) || [];
 
     text.textContent = `Exercises for Session ${session.sessionNo} of (${course.title})`;
 
-    const sessionExercises = exercises.filter(e =>
-        e.courseId === course.id && e.sessionNo === session.sessionNo
-    );
+    const res = await api.get(`/courses/${session.courseId}/sessions/${session.sessionId}/exercises`)
+    const exercises = res.data || []
 
-    exerciseBody.innerHTML = sessionExercises.map((ex, index) => 
+    exerciseBody.innerHTML = exercises.map((ex, index) =>
         `
             <tr>
-                <td>${index+1}</td>
-                <td>${ex.question}</td>
-                <td>${ex.answer}</td>
+                <td>${index + 1}</td>
+                <td>${ex.Exercise_Question}</td>
+                <td>${ex.Exercise_Answer}</td>
                 <td>
                     <button class="mini-btn delete delete-ex-btn"
-                        data-exercise-no="${ex.exerciseNo}"
-                        data-session-no="${ex.sessionNo}"
-                        data-course-id="${ex.courseId}">
+                        data-exercise-no="${ex.Exercise_Number}"
+                        data-session-no="${ex.Session_ID}"
+                        data-course-id="${ex.Course_ID}">
                         <i class="bi bi-trash"></i>
                         Delete
                     </button>
@@ -34,23 +33,24 @@ export function renderExercise(){
             </tr>
         `
     ).join("")
-    
-    document.querySelectorAll(".delete-ex-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const exercise = JSON.parse(localStorage.getItem("exercises"))
-            const ok = confirm("Delete session " + btn.dataset.exerciseNo + "?");
 
-            if(ok){
+    document.querySelectorAll(".delete-ex-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const ok = confirm("Delete session " + btn.dataset.exerciseNo + "?");
+            if(!ok) return;
+
+            try{
                 const exerciseNo = btn.dataset.exerciseNo
-                const sessionNo = btn.dataset.sessionNo
+                const sessionId = btn.dataset.sessionNo
                 const courseId = btn.dataset.courseId
 
-                const index = exercise.findIndex(e => e.exerciseNo === exerciseNo && e.courseId === courseId && e.sessionNo === sessionNo);
-                exercise.splice(index, 1)
-                localStorage.setItem("exercises", JSON.stringify(exercise))
-                alert("Delete session successfully")
-                loadPage("exercises");
+                await api.delete(`/courses/${courseId}/sessions/${sessionId}/exercises/${exerciseNo}`)
+                loadPage("exercises")
+            }catch(err){
+                console.error(err)
+                alert("Delete failed")
             }
+            
         })
     })
 
@@ -74,7 +74,7 @@ export function setupExerciseImport() {
     backBtn.addEventListener("click", () => {
         loadPage("exercises")
     })
-    
+
     importBtn.addEventListener("click", async () => {
         if (!excelFile.files.length) {
             alert("Please choose an Excel file first.");
@@ -82,7 +82,7 @@ export function setupExerciseImport() {
         }
 
         const file = excelFile.files[0]
-        
+
         const arrayBuffer = await file.arrayBuffer();
         const workbook = XLSX.read(arrayBuffer, { type: "array" });
 
@@ -94,7 +94,7 @@ export function setupExerciseImport() {
 
         const exercise = rows.map((row, index) => ({
             exerciseNo: index + 1,
-            sessionNo: selectedSession.sessionNo,
+            sessionId: selectedSession.sessionId,
             courseId: selectedSession.courseId,
 
             question: row.Question?.trim() || "",
@@ -111,19 +111,15 @@ export function setupExerciseImport() {
             return;
         }
 
-        const allExercises = JSON.parse(localStorage.getItem("exercises")) || [];
-        console.log(allExercises)
-        const filtered = allExercises.filter(ex => !(ex.sessionNo === selectedSession.sessionNo && ex.courseId === selectedSession.courseId));
-        console.log(filtered)
-
-        const updated = [...filtered, ...exercise];
-        console.log(updated)
-        localStorage.setItem("exercises", JSON.stringify(updated));
+        await api.post(
+            `/courses/${selectedSession.courseId}/sessions/${selectedSession.sessionId}/exercises/import`,
+            { exercise }
+        )
 
         importResult.innerHTML = `
             <div class="alert-success">
-                Imported <b>${exercise.length}</b> exercises for Session <b>${selectedSession.sessionNo}</b>.
-            </div>
-        `;
+                Imported <b>${exercise.length}</b> exercises successfully
+            </div> 
+        `
     })
 }
